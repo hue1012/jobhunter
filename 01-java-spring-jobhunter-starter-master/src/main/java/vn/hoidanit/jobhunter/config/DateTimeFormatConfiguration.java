@@ -8,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * Configure the converters to use the ISO format for dates by default.
  */
+// date chuan ISO 8601
 @Configuration
 public class DateTimeFormatConfiguration implements WebMvcConfigurer {
 

@@ -1,3 +1,5 @@
+package vn.javacodetest;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -5,9 +7,9 @@ import java.sql.SQLException;
 public class JdbcConnectJobhunter {
     public static void main(String[] args) {
         // Thông tin kết nối dựa trên file cấu hình bạn đưa ra
-        String url = "jdbc:mysql://localhost:33067/jobhunter";
+        String url = "jdbc:mysql://localhost:3306/jobhunter";
         String username = "root";
-        String password = "123456789";
+        String password = "123456";
 
         Connection conn = null;
 

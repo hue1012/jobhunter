@@ -2,8 +2,8 @@ package vn.hoidanit.jobhunter.domain.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class LoginDTO {
-    @NotBlank(message = "Khong duoc de trong truong usernam")
+public class ReqLoginDTO {
+    @NotBlank(message = "Khong duoc de trong truong username")
     private String username;
     @NotBlank(message = "Khong duoc de trong truong password")
     private String password;

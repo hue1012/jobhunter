@@ -28,7 +28,7 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank(message = "Khong duoc de trong")
+    @NotBlank(message = "name ko duoc de trong")
     private String name;
 
     @Column(columnDefinition = "MEDIUMTEXT")
@@ -37,7 +37,7 @@ public class Company {
     private String address;
     private String logo;
     // định dạng giờ ở FE, vì ở BE mặc định là GMT+0
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "GMT+7")
     private Instant createdAt;
     private Instant updatedAt;
     private String createdBy;
