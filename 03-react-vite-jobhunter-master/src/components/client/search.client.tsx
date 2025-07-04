@@ -1,5 +1,5 @@
-import { Button, Col, Form, Row, Select, notification } from 'antd';
-import { EnvironmentOutlined, MonitorOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Row, Select, notification, Input } from 'antd';
+import { EnvironmentOutlined, MonitorOutlined, SearchOutlined, RocketOutlined } from '@ant-design/icons';
 import { LOCATION_LIST } from '@/config/utils';
 import { ProForm } from '@ant-design/pro-components';
 import { useEffect, useState } from 'react';
@@ -73,60 +73,187 @@ const SearchClient = () => {
     }
 
     return (
-        <ProForm
-            form={form}
-            onFinish={onFinish}
-            submitter={
-                {
+        <div style={{
+            background: 'white',
+            borderRadius: '16px',
+            padding: '0'
+        }}>
+            <ProForm
+                form={form}
+                onFinish={onFinish}
+                submitter={{
                     render: () => <></>
-                }
-            }
-        >
-            <Row gutter={[20, 20]}>
-                <Col span={24}><h2>Việc Làm IT Cho Developer "Chất"</h2></Col>
-                <Col span={24} md={16}>
-                    <ProForm.Item
-                        name="skills"
-                    >
-                        <Select
-                            mode="multiple"
-                            allowClear
-                            suffixIcon={null}
-                            style={{ width: '100%' }}
-                            placeholder={
-                                <>
-                                    <MonitorOutlined /> Tìm theo kỹ năng...
-                                </>
-                            }
-                            optionLabelProp="label"
-                            options={optionsSkills}
-                        />
-                    </ProForm.Item>
-                </Col>
-                <Col span={12} md={4}>
-                    <ProForm.Item
-                        name="location"
-                    >
-                        <Select
-                            mode="multiple"
-                            allowClear
-                            suffixIcon={null}
-                            style={{ width: '100%' }}
-                            placeholder={
-                                <>
-                                    <EnvironmentOutlined /> Địa điểm...
-                                </>
-                            }
-                            optionLabelProp="label"
-                            options={optionsLocations}
-                        />
-                    </ProForm.Item>
-                </Col>
-                <Col span={12} md={4}>
-                    <Button type='primary' onClick={() => form.submit()}>Search</Button>
-                </Col>
-            </Row>
-        </ProForm>
+                }}
+            >
+                <Row gutter={[16, 16]} align="middle">
+                    <Col span={24} md={12}>
+                        <div style={{
+                            position: 'relative',
+                            background: 'linear-gradient(135deg, #f8faff, #f1f5f9)',
+                            borderRadius: '12px',
+                            border: '2px solid #e2e8f0',
+                            overflow: 'hidden'
+                        }}>
+                            <ProForm.Item
+                                name="skills"
+                                style={{ margin: 0 }}
+                            >
+                                <Select
+                                    mode="multiple"
+                                    allowClear
+                                    size="large"
+                                    style={{
+                                        width: '100%',
+                                        border: 'none'
+                                    }}
+                                    placeholder="🚀 Nhập kỹ năng (React, Node.js, Python...)"
+                                    optionLabelProp="label"
+                                    options={optionsSkills}
+                                    suffixIcon={<MonitorOutlined style={{ color: '#6366f1', fontSize: '16px' }} />}
+                                    dropdownStyle={{
+                                        borderRadius: '12px',
+                                        boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+                                    }}
+                                    tagRender={(props) => {
+                                        const { label, closable, onClose } = props;
+                                        return (
+                                            <span
+                                                style={{
+                                                    background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                                                    color: 'white',
+                                                    padding: '4px 12px',
+                                                    borderRadius: '20px',
+                                                    fontSize: '12px',
+                                                    fontWeight: '600',
+                                                    margin: '2px',
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    gap: '6px'
+                                                }}
+                                            >
+                                                {label}
+                                                {closable && (
+                                                    <span
+                                                        onClick={onClose}
+                                                        style={{
+                                                            cursor: 'pointer',
+                                                            fontSize: '14px',
+                                                            opacity: 0.8
+                                                        }}
+                                                    >
+                                                        ×
+                                                    </span>
+                                                )}
+                                            </span>
+                                        );
+                                    }}
+                                />
+                            </ProForm.Item>
+                        </div>
+                    </Col>
+
+                    <Col span={24} md={6}>
+                        <div style={{
+                            position: 'relative',
+                            background: 'linear-gradient(135deg, #f8faff, #f1f5f9)',
+                            borderRadius: '12px',
+                            border: '2px solid #e2e8f0',
+                            overflow: 'hidden'
+                        }}>
+                            <ProForm.Item
+                                name="location"
+                                style={{ margin: 0 }}
+                            >
+                                <Select
+                                    mode="multiple"
+                                    allowClear
+                                    size="large"
+                                    style={{
+                                        width: '100%',
+                                        border: 'none'
+                                    }}
+                                    placeholder="📍 Chọn địa điểm"
+                                    optionLabelProp="label"
+                                    options={optionsLocations}
+                                    suffixIcon={<EnvironmentOutlined style={{ color: '#10b981', fontSize: '16px' }} />}
+                                    dropdownStyle={{
+                                        borderRadius: '12px',
+                                        boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+                                    }}
+                                    tagRender={(props) => {
+                                        const { label, closable, onClose } = props;
+                                        return (
+                                            <span
+                                                style={{
+                                                    background: 'linear-gradient(135deg, #10b981, #059669)',
+                                                    color: 'white',
+                                                    padding: '4px 12px',
+                                                    borderRadius: '20px',
+                                                    fontSize: '12px',
+                                                    fontWeight: '600',
+                                                    margin: '2px',
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    gap: '6px'
+                                                }}
+                                            >
+                                                {label}
+                                                {closable && (
+                                                    <span
+                                                        onClick={onClose}
+                                                        style={{
+                                                            cursor: 'pointer',
+                                                            fontSize: '14px',
+                                                            opacity: 0.8
+                                                        }}
+                                                    >
+                                                        ×
+                                                    </span>
+                                                )}
+                                            </span>
+                                        );
+                                    }}
+                                />
+                            </ProForm.Item>
+                        </div>
+                    </Col>
+
+                    <Col span={24} md={6}>
+                        <Button
+                            type="primary"
+                            size="large"
+                            icon={<SearchOutlined />}
+                            onClick={() => form.submit()}
+                            style={{
+                                width: '100%',
+                                height: '56px',
+                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                borderColor: 'transparent',
+                                borderRadius: '12px',
+                                fontSize: '16px',
+                                fontWeight: '700',
+                                boxShadow: '0 4px 16px rgba(102, 126, 234, 0.3)',
+                                transition: 'all 0.3s ease',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '8px'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = '0 8px 24px rgba(102, 126, 234, 0.4)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = '0 4px 16px rgba(102, 126, 234, 0.3)';
+                            }}
+                        >
+                            Tìm Kiếm
+                        </Button>
+                    </Col>
+                </Row>
+            </ProForm>
+        </div>
     )
 }
 export default SearchClient;

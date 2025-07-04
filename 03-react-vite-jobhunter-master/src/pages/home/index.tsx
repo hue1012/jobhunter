@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Divider } from 'antd';
+import { Divider, Carousel, Card, Typography } from 'antd';
 import styles from 'styles/client.module.scss';
 import SearchClient from '@/components/client/search.client';
 import JobCard from '@/components/client/card/job.card';
 import CompanyCard from '@/components/client/card/company.card';
+
+const { Title } = Typography;
 
 interface Message {
     id: number;
@@ -114,16 +116,246 @@ const HomePage = () => {
 
     return (
         <>
-            {/* Trang home mới */}
-            <div className={`${styles["container"]} ${styles["home-section"]}`}>
-                <div className="search-content" style={{ marginTop: 20 }}>
-                    <SearchClient />
+            {/* Hero Section với Carousel */}
+            <div style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                minHeight: '80vh',
+                position: 'relative',
+                overflow: 'hidden'
+            }}>
+                {/* Background Carousel với Gradient và Icon */}
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    opacity: 0.3
+                }}>
+                    <Carousel
+                        autoplay
+                        autoplaySpeed={5000}
+                        speed={1500}
+                        fade
+                        effect="fade"
+                        dots={true}
+                        arrows={false}
+                        dotPosition="bottom"
+                    >
+                        <div>
+                            <div style={{
+                                width: '100%',
+                                height: '80vh',
+                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '8rem',
+                                color: 'rgba(255,255,255,0.4)'
+                            }}>
+                                💼
+                            </div>
+                        </div>
+                        <div>
+                            <div style={{
+                                width: '100%',
+                                height: '80vh',
+                                background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '8rem',
+                                color: 'rgba(255,255,255,0.4)'
+                            }}>
+                                🚀
+                            </div>
+                        </div>
+                        <div>
+                            <div style={{
+                                width: '100%',
+                                height: '80vh',
+                                background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '8rem',
+                                color: 'rgba(255,255,255,0.4)'
+                            }}>
+                                🎯
+                            </div>
+                        </div>
+                        <div>
+                            <div style={{
+                                width: '100%',
+                                height: '80vh',
+                                background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '8rem',
+                                color: 'rgba(255,255,255,0.4)'
+                            }}>
+                                🏢
+                            </div>
+                        </div>
+                    </Carousel>
                 </div>
-                <Divider />
-                <CompanyCard />
-                <div style={{ margin: 50 }}></div>
-                <Divider />
-                <JobCard />
+
+                {/* Overlay gradient */}
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.5) 100%)'
+                }} />
+
+                {/* Content */}
+                <div style={{
+                    position: 'relative',
+                    zIndex: 2,
+                    padding: '60px 0',
+                    textAlign: 'center',
+                    color: 'white'
+                }}>
+                    <div className={styles["container"]}>
+                        {/* Hero Title */}
+                        <div style={{ marginBottom: '50px' }}>
+                            <Title
+                                level={1}
+                                style={{
+                                    color: 'white',
+                                    fontSize: '3.5rem',
+                                    fontWeight: '800',
+                                    marginBottom: '20px',
+                                    textShadow: '0 4px 8px rgba(0,0,0,0.3)',
+                                    letterSpacing: '-1px'
+                                }}
+                            >
+                                🚀 Tìm Việc Làm Mơ Ước
+                            </Title>
+                            <p style={{
+                                fontSize: '1.4rem',
+                                opacity: 0.95,
+                                fontWeight: '500',
+                                maxWidth: '700px',
+                                margin: '0 auto',
+                                lineHeight: '1.6',
+                                textShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                            }}>
+                                💼 Kết nối với hàng nghìn cơ hội việc làm hàng đầu từ các công ty uy tín.
+                                Khám phá sự nghiệp trong các lĩnh vực ngay hôm nay!
+                            </p>
+                        </div>
+
+                        {/* Enhanced Search Section */}
+                        <Card
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.95)',
+                                backdropFilter: 'blur(10px)',
+                                borderRadius: '24px',
+                                border: 'none',
+                                boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+                                maxWidth: '900px',
+                                margin: '0 auto'
+                            }}
+                            bodyStyle={{
+                                padding: '40px'
+                            }}
+                        >
+                            <div style={{ marginBottom: '24px', textAlign: 'center' }}>
+                                <Title
+                                    level={3}
+                                    style={{
+                                        color: '#1f2937',
+                                        marginBottom: '8px',
+                                        fontSize: '1.8rem',
+                                        fontWeight: '700'
+                                    }}
+                                >
+                                    🔍 Tìm Kiếm Thông Minh
+                                </Title>
+                                <p style={{
+                                    color: '#6b7280',
+                                    fontSize: '16px',
+                                    margin: 0,
+                                    fontWeight: '500'
+                                }}>
+                                    Nhập kỹ năng và địa điểm để tìm công việc phù hợp nhất
+                                </p>
+                            </div>
+                            <SearchClient />
+                        </Card>
+
+                        {/* Stats Section */}
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                            gap: '30px',
+                            marginTop: '60px',
+                            maxWidth: '800px',
+                            margin: '60px auto 0'
+                        }}>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{
+                                    fontSize: '3rem',
+                                    fontWeight: '800',
+                                    color: 'white',
+                                    textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                                }}>1000+</div>
+                                <div style={{
+                                    fontSize: '1.1rem',
+                                    opacity: 0.9,
+                                    fontWeight: '600'
+                                }}>🎯 Việc làm</div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{
+                                    fontSize: '3rem',
+                                    fontWeight: '800',
+                                    color: 'white',
+                                    textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                                }}>500+</div>
+                                <div style={{
+                                    fontSize: '1.1rem',
+                                    opacity: 0.9,
+                                    fontWeight: '600'
+                                }}>🏢 Công ty uy tín</div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{
+                                    fontSize: '3rem',
+                                    fontWeight: '800',
+                                    color: 'white',
+                                    textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                                }}>10k+</div>
+                                <div style={{
+                                    fontSize: '1.1rem',
+                                    opacity: 0.9,
+                                    fontWeight: '600'
+                                }}>👥 Ứng viên</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Main Content */}
+            <div className={`${styles["container"]} ${styles["home-section"]}`}>
+                <div style={{ padding: '80px 0 60px' }}>
+                    <CompanyCard />
+                </div>
+
+                <Divider style={{
+                    borderColor: '#e5e7eb',
+                    borderWidth: '2px',
+                    margin: '60px 0'
+                }} />
+
+                <div style={{ padding: '60px 0 80px' }}>
+                    <JobCard />
+                </div>
             </div>
 
             {/* Chatbot Widget */}
@@ -366,6 +598,32 @@ const HomePage = () => {
                         transform: scale(1);
                         opacity: 1;
                     }
+                }
+                
+                /* Custom Carousel Dots Styling */
+                .ant-carousel .ant-carousel-dots {
+                    bottom: 30px !important;
+                    z-index: 10;
+                }
+                
+                .ant-carousel .ant-carousel-dots li button {
+                    width: 12px !important;
+                    height: 12px !important;
+                    border-radius: 50% !important;
+                    background: rgba(255, 255, 255, 0.4) !important;
+                    border: 2px solid rgba(255, 255, 255, 0.6) !important;
+                    transition: all 0.3s ease !important;
+                }
+                
+                .ant-carousel .ant-carousel-dots li.ant-carousel-dots-active button {
+                    background: rgba(255, 255, 255, 0.9) !important;
+                    border-color: rgba(255, 255, 255, 1) !important;
+                    transform: scale(1.2) !important;
+                }
+                
+                .ant-carousel .ant-carousel-dots li:hover button {
+                    background: rgba(255, 255, 255, 0.7) !important;
+                    transform: scale(1.1) !important;
                 }
                 `}
             </style>

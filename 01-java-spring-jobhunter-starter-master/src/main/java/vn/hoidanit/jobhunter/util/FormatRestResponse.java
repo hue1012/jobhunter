@@ -1,6 +1,7 @@
 package vn.hoidanit.jobhunter.util;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import jakarta.servlet.http.HttpServletResponse;
-import vn.hoidanit.jobhunter.domain.CustomResponse;
+import vn.hoidanit.jobhunter.domain.response.CustomResponse;
 import vn.hoidanit.jobhunter.util.annotation.ApiMessage;
 
 @ControllerAdvice
@@ -38,7 +39,7 @@ public class FormatRestResponse implements ResponseBodyAdvice<Object> {
         // luôn.
         // nhung truong hop nhu: delete,.. tra ve String, khong phai loi thi tra ve body
         // luon
-        if (body instanceof String) {
+        if (body instanceof String || body instanceof Resource) {
             return body;
         }
         if (status >= 400) {

@@ -26,8 +26,8 @@ const JobPage = () => {
     const handleDeleteJob = async (id: string | undefined) => {
         if (id) {
             const res = await callDeleteJob(id);
-            if (res && res.data) {
-                message.success('Xóa Job thành công');
+            if (res && (res.data || typeof res === 'string')) {
+                message.success('Xóa công việc thành công');
                 reloadTable();
             } else {
                 notification.error({
@@ -41,6 +41,13 @@ const JobPage = () => {
     const reloadTable = () => {
         tableRef?.current?.reload();
     }
+    const LEVEL_MAPPING = {
+        INTERN: 'Không yêu cầu kinh ',
+        FRESHER: 'Từ 1 - 2 năm kinh nghiệm',
+        JUNIOR: 'Từ 2 - 3 năm kinh nghiệm',
+        MIDDLE: 'Từ 3 - 5 năm kinh nghiệm',
+        SENIOR: 'Từ 5 năm kinh nghiệm'
+    };
 
     const columns: ProColumns<IJob>[] = [
         {

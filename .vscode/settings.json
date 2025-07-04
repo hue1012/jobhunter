@@ -1,0 +1,7 @@
+{
+    "java.debug.settings.onBuildFailureProceed": true,
+    "cSpell.words": [
+        "jsonify"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
+}

@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-JobhunterApplication<01-java-spring-jobhunter-starter-master>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "vn.hoidanit.jobhunter.JobhunterApplication",
+            "projectName": "01-java-spring-jobhunter-starter-master",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-JobhunterApplication<jobhunter-01-java-spring-jobhunter-starter-master>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "vn.hoidanit.jobhunter.JobhunterApplication",
+            "projectName": "jobhunter-01-java-spring-jobhunter-starter-master",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

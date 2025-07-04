@@ -234,18 +234,22 @@ const UserUpdateInfo = (props: any) => {
         fetchDetail();
     }, [userBasic?.id, userBasic]);
 
+    // Fix: Đơn giản hóa việc set form values với fallback cho email
     useEffect(() => {
         if (user) {
-            form.setFieldsValue({
-                name: user.name ?? "",
-                email: user.email ?? "",
-                address: user.address ?? "",
+            console.log("Setting form values for user:", user); // Debug log
+            const formValues = {
+                name: user.name || "",
+                email: user.email || userBasic?.email || "", // Fallback từ userBasic nếu user.email bị mất
+                address: user.address || "",
                 age: typeof user.age === "number" ? user.age : undefined,
                 gender: user.gender && ["MALE", "FEMALE", "OTHER"].includes(user.gender)
                     ? user.gender : undefined
-            });
+            };
+            console.log("Form values to set:", formValues); // Debug log
+            form.setFieldsValue(formValues);
         }
-    }, [user]);
+    }, [user, form, userBasic?.email]);
 
     const onFinish = async (values: any) => {
         if (!user?.id) {
@@ -257,12 +261,21 @@ const UserUpdateInfo = (props: any) => {
             const res = await callUpdateUser({
                 ...user,
                 ...values,
+                email: user.email, // Đảm bảo email luôn được preserve
                 age: values.age ? Number(values.age) : null,
             });
 
+            console.log("API Response:", res); // Debug log để kiểm tra response
+
             if (res && res.data) {
                 message.success("Cập nhật thông tin thành công");
-                setUser(res.data);
+                // Đảm bảo email được preserve trong response
+                const updatedUser = {
+                    ...res.data,
+                    email: res.data.email || user.email // Fallback nếu API không trả về email
+                };
+                console.log("Updated user:", updatedUser); // Debug log
+                setUser(updatedUser);
             } else {
                 message.error("Cập nhật thất bại");
             }
@@ -312,125 +325,148 @@ const UserUpdateInfo = (props: any) => {
     }
 
     return (
-        <Card
-            bordered={false}
-            style={{
-                background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
-                borderRadius: '12px'
-            }}
-        >
-            <div style={{
-                background: 'rgba(255, 255, 255, 0.95)',
-                borderRadius: '8px',
-                padding: '32px',
-                backdropFilter: 'blur(10px)'
-            }}>
-                <Space align="center" style={{ marginBottom: '24px' }}>
-                    <Avatar
-                        size={48}
-                        style={{ backgroundColor: '#f39c12' }}
-                        icon={<UserOutlined />}
-                    />
-                    <div>
-                        <Title level={3} style={{ margin: 0, color: '#f39c12' }}>
-                            Thông tin cá nhân
-                        </Title>
-                        <Text type="secondary">Cập nhật thông tin để hoàn thiện hồ sơ</Text>
-                    </div>
-                </Space>
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '400px',
+            padding: '20px'
+        }}>
+            <Card
+                bordered={false}
+                style={{
+                    background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
+                    borderRadius: '12px',
+                    width: '100%',
+                    maxWidth: '700px'
+                }}
+            >
+                <div style={{
+                    background: 'rgba(255, 255, 255, 0.95)',
+                    borderRadius: '8px',
+                    padding: '32px',
+                    backdropFilter: 'blur(10px)'
+                }}>
+                    <Space align="center" style={{ marginBottom: '24px', width: '100%', justifyContent: 'center' }}>
+                        <Avatar
+                            size={48}
+                            style={{ backgroundColor: '#f39c12' }}
+                            icon={<UserOutlined />}
+                        />
+                        <div style={{ textAlign: 'center' }}>
+                            <Title level={3} style={{ margin: 0, color: '#f39c12' }}>
+                                Thông tin cá nhân
+                            </Title>
+                            <Text type="secondary">Cập nhật thông tin để hoàn thiện hồ sơ</Text>
+                        </div>
+                    </Space>
 
-                <Form
-                    form={form}
-                    layout="vertical"
-                    onFinish={onFinish}
-                    style={{ maxWidth: 600 }}
-                >
-                    <Row gutter={[24, 16]}>
-                        <Col xs={24} md={12}>
-                            <Form.Item
-                                label={<Text strong>Họ và tên</Text>}
-                                name="name"
-                                rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
-                            >
-                                <Input
-                                    prefix={<UserOutlined style={{ color: '#f39c12' }} />}
-                                    size="large"
-                                    placeholder="Nhập họ và tên"
-                                    style={{ borderRadius: '8px' }}
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col xs={24} md={12}>
-                            <Form.Item label={<Text strong>Email</Text>} name="email">
-                                <Input
-                                    prefix={<MailOutlined style={{ color: '#f39c12' }} />}
-                                    disabled
-                                    size="large"
-                                    style={{ borderRadius: '8px', backgroundColor: '#f8f9fa' }}
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col xs={24}>
-                            <Form.Item label={<Text strong>Địa chỉ</Text>} name="address">
-                                <Input
-                                    size="large"
-                                    placeholder="Nhập địa chỉ của bạn"
-                                    style={{ borderRadius: '8px' }}
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col xs={24} md={12}>
-                            <Form.Item label={<Text strong>Tuổi</Text>} name="age">
-                                <Input
-                                    type="number"
-                                    min={0}
-                                    max={100}
-                                    size="large"
-                                    placeholder="Nhập tuổi"
-                                    style={{ borderRadius: '8px' }}
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col xs={24} md={12}>
-                            <Form.Item label={<Text strong>Giới tính</Text>} name="gender">
-                                <Select
-                                    allowClear
-                                    size="large"
-                                    placeholder="Chọn giới tính"
-                                    style={{ borderRadius: '8px' }}
+                    <Form
+                        key={user?.id} // Force re-render khi user thay đổi
+                        form={form}
+                        layout="vertical"
+                        onFinish={onFinish}
+                        initialValues={{
+                            name: user?.name || "",
+                            email: user?.email || userBasic?.email || "", // Fallback từ userBasic
+                            address: user?.address || "",
+                            age: typeof user?.age === "number" ? user?.age : undefined,
+                            gender: user?.gender && ["MALE", "FEMALE", "OTHER"].includes(user?.gender)
+                                ? user?.gender : undefined
+                        }}
+                    >
+                        <Row gutter={[24, 16]}>
+                            <Col xs={24} md={12}>
+                                <Form.Item
+                                    label={<Text strong>Họ và tên</Text>}
+                                    name="name"
+                                    rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
                                 >
-                                    <Select.Option value="MALE">Nam</Select.Option>
-                                    <Select.Option value="FEMALE">Nữ</Select.Option>
-                                    <Select.Option value="OTHER">Khác</Select.Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                                    <Input
+                                        prefix={<UserOutlined style={{ color: '#f39c12' }} />}
+                                        size="large"
+                                        placeholder="Nhập họ và tên"
+                                        style={{ borderRadius: '8px' }}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                                <Form.Item
+                                    label={<Text strong>Email</Text>}
+                                    name="email"
+                                >
+                                    <Input
+                                        prefix={<MailOutlined style={{ color: '#f39c12' }} />}
+                                        disabled
+                                        size="large"
+                                        style={{ borderRadius: '8px', backgroundColor: '#f8f9fa' }}
+                                        value={user?.email || userBasic?.email || ""} // Controlled value với fallback
+                                        placeholder={user?.email || userBasic?.email || "Email không có sẵn"}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24}>
+                                <Form.Item label={<Text strong>Địa chỉ</Text>} name="address">
+                                    <Input
+                                        size="large"
+                                        placeholder="Nhập địa chỉ của bạn"
+                                        style={{ borderRadius: '8px' }}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                                <Form.Item label={<Text strong>Tuổi</Text>} name="age">
+                                    <Input
+                                        type="number"
+                                        min={0}
+                                        max={100}
+                                        size="large"
+                                        placeholder="Nhập tuổi"
+                                        style={{ borderRadius: '8px' }}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                                <Form.Item label={<Text strong>Giới tính</Text>} name="gender">
+                                    <Select
+                                        allowClear
+                                        size="large"
+                                        placeholder="Chọn giới tính"
+                                        style={{ borderRadius: '8px' }}
+                                    >
+                                        <Select.Option value="MALE">Nam</Select.Option>
+                                        <Select.Option value="FEMALE">Nữ</Select.Option>
+                                        <Select.Option value="OTHER">Khác</Select.Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                        </Row>
 
-                    <Divider />
+                        <Divider />
 
-                    <Form.Item style={{ marginBottom: 0 }}>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            size="large"
-                            style={{
-                                borderRadius: '8px',
-                                background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
-                                border: 'none',
-                                height: '48px',
-                                fontWeight: '600',
-                                boxShadow: '0 4px 15px rgba(253, 203, 110, 0.3)',
-                                color: '#d68910'
-                            }}
-                            block
-                        >
-                            <UserOutlined /> Cập nhật thông tin
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </div>
-        </Card>
+                        <Form.Item style={{ marginBottom: 0 }}>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                size="large"
+                                style={{
+                                    borderRadius: '8px',
+                                    background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
+                                    border: 'none',
+                                    height: '48px',
+                                    fontWeight: '600',
+                                    boxShadow: '0 4px 15px rgba(253, 203, 110, 0.3)',
+                                    color: '#d68910'
+                                }}
+                                block
+                            >
+                                <UserOutlined /> Cập nhật thông tin
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </div>
+            </Card>
+        </div>
     );
 };
 
@@ -579,137 +615,146 @@ const UserChangePassword = (props: any) => {
     };
 
     return (
-        <Card
-            bordered={false}
-            style={{
-                background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
-                borderRadius: '12px'
-            }}
-        >
-            <div style={{
-                background: 'rgba(255, 255, 255, 0.95)',
-                borderRadius: '8px',
-                padding: '32px',
-                backdropFilter: 'blur(10px)'
-            }}>
-                <Space align="center" style={{ marginBottom: '24px' }}>
-                    <Avatar
-                        size={48}
-                        style={{ backgroundColor: '#f39c12' }}
-                        icon={<SafetyOutlined />}
-                    />
-                    <div>
-                        <Title level={3} style={{ margin: 0, color: '#f39c12' }}>
-                            Đổi mật khẩu
-                        </Title>
-                        <Text type="secondary">Bảo mật tài khoản với mật khẩu mạnh</Text>
-                    </div>
-                </Space>
-
-                <Form
-                    form={form}
-                    layout="vertical"
-                    onFinish={onFinish}
-                    style={{ maxWidth: 500 }}
-                >
-                    <Form.Item
-                        label={<Text strong>Mật khẩu hiện tại</Text>}
-                        name="currentPassword"
-                        rules={[
-                            { required: true, message: "Vui lòng nhập mật khẩu hiện tại" }
-                        ]}
-                        extra={<Text type="secondary" style={{ fontSize: '12px' }}>
-                            Nhập mật khẩu bạn đang sử dụng để đăng nhập
-                        </Text>}
-                    >
-                        <Input.Password
-                            prefix={<LockOutlined style={{ color: '#f39c12' }} />}
-                            placeholder="Nhập mật khẩu hiện tại"
-                            size="large"
-                            style={{ borderRadius: '8px' }}
-                            visibilityToggle={true}
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '400px',
+            padding: '20px'
+        }}>
+            <Card
+                bordered={false}
+                style={{
+                    background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
+                    borderRadius: '12px',
+                    width: '100%',
+                    maxWidth: '600px'
+                }}
+            >
+                <div style={{
+                    background: 'rgba(255, 255, 255, 0.95)',
+                    borderRadius: '8px',
+                    padding: '32px',
+                    backdropFilter: 'blur(10px)'
+                }}>
+                    <Space align="center" style={{ marginBottom: '24px', width: '100%', justifyContent: 'center' }}>
+                        <Avatar
+                            size={48}
+                            style={{ backgroundColor: '#f39c12' }}
+                            icon={<SafetyOutlined />}
                         />
-                    </Form.Item>
+                        <div style={{ textAlign: 'center' }}>
+                            <Title level={3} style={{ margin: 0, color: '#f39c12' }}>
+                                Đổi mật khẩu
+                            </Title>
+                            <Text type="secondary">Bảo mật tài khoản với mật khẩu mạnh</Text>
+                        </div>
+                    </Space>
 
-                    <Form.Item
-                        label={<Text strong>Mật khẩu mới</Text>}
-                        name="newPassword"
-                        rules={[
-                            { required: true, message: "Vui lòng nhập mật khẩu mới" },
-                            { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự" }
-                        ]}
+                    <Form
+                        form={form}
+                        layout="vertical"
+                        onFinish={onFinish}
                     >
-                        <Input.Password
-                            prefix={<LockOutlined style={{ color: '#f39c12' }} />}
-                            placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
-                            size="large"
-                            style={{ borderRadius: '8px' }}
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        label={<Text strong>Xác nhận mật khẩu mới</Text>}
-                        name="confirmPassword"
-                        dependencies={['newPassword']}
-                        rules={[
-                            { required: true, message: "Vui lòng xác nhận mật khẩu mới" },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('newPassword') === value) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error('Mật khẩu xác nhận không khớp'));
-                                },
-                            })
-                        ]}
-                    >
-                        <Input.Password
-                            prefix={<LockOutlined style={{ color: '#f39c12' }} />}
-                            placeholder="Nhập lại mật khẩu mới"
-                            size="large"
-                            style={{ borderRadius: '8px' }}
-                        />
-                    </Form.Item>
-
-                    <Divider />
-
-                    <Form.Item style={{ marginBottom: 0 }}>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            loading={loading}
-                            size="large"
-                            style={{
-                                borderRadius: '8px',
-                                background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
-                                border: 'none',
-                                height: '48px',
-                                fontWeight: '600',
-                                boxShadow: '0 4px 15px rgba(253, 203, 110, 0.3)',
-                                color: '#d68910'
-                            }}
-                            block
+                        <Form.Item
+                            label={<Text strong>Mật khẩu hiện tại</Text>}
+                            name="currentPassword"
+                            rules={[
+                                { required: true, message: "Vui lòng nhập mật khẩu hiện tại" }
+                            ]}
+                            extra={<Text type="secondary" style={{ fontSize: '12px' }}>
+                                Nhập mật khẩu bạn đang sử dụng để đăng nhập
+                            </Text>}
                         >
-                            <SafetyOutlined /> {loading ? 'Đang xử lý...' : 'Cập nhật mật khẩu'}
-                        </Button>
-                    </Form.Item>
+                            <Input.Password
+                                prefix={<LockOutlined style={{ color: '#f39c12' }} />}
+                                placeholder="Nhập mật khẩu hiện tại"
+                                size="large"
+                                style={{ borderRadius: '8px' }}
+                                visibilityToggle={true}
+                            />
+                        </Form.Item>
 
-                    <div style={{
-                        marginTop: '20px',
-                        padding: '16px',
-                        backgroundColor: '#fffbf0',
-                        borderRadius: '8px',
-                        border: '1px solid #ffd591'
-                    }}>
-                        <Text style={{ fontSize: '13px', color: '#d68910' }}>
-                            <SafetyOutlined style={{ marginRight: '6px' }} />
-                            <strong>Lưu ý bảo mật:</strong> Sử dụng mật khẩu mạnh với ít nhất 8 ký tự,
-                            bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.
-                        </Text>
-                    </div>
-                </Form>
-            </div>
-        </Card>
+                        <Form.Item
+                            label={<Text strong>Mật khẩu mới</Text>}
+                            name="newPassword"
+                            rules={[
+                                { required: true, message: "Vui lòng nhập mật khẩu mới" },
+                                { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự" }
+                            ]}
+                        >
+                            <Input.Password
+                                prefix={<LockOutlined style={{ color: '#f39c12' }} />}
+                                placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
+                                size="large"
+                                style={{ borderRadius: '8px' }}
+                            />
+                        </Form.Item>
+
+                        <Form.Item
+                            label={<Text strong>Xác nhận mật khẩu mới</Text>}
+                            name="confirmPassword"
+                            dependencies={['newPassword']}
+                            rules={[
+                                { required: true, message: "Vui lòng xác nhận mật khẩu mới" },
+                                ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                        if (!value || getFieldValue('newPassword') === value) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('Mật khẩu xác nhận không khớp'));
+                                    },
+                                })
+                            ]}
+                        >
+                            <Input.Password
+                                prefix={<LockOutlined style={{ color: '#f39c12' }} />}
+                                placeholder="Nhập lại mật khẩu mới"
+                                size="large"
+                                style={{ borderRadius: '8px' }}
+                            />
+                        </Form.Item>
+
+                        <Divider />
+
+                        <Form.Item style={{ marginBottom: 0 }}>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                loading={loading}
+                                size="large"
+                                style={{
+                                    borderRadius: '8px',
+                                    background: 'linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%)',
+                                    border: 'none',
+                                    height: '48px',
+                                    fontWeight: '600',
+                                    boxShadow: '0 4px 15px rgba(253, 203, 110, 0.3)',
+                                    color: '#d68910'
+                                }}
+                                block
+                            >
+                                <SafetyOutlined /> {loading ? 'Đang xử lý...' : 'Cập nhật mật khẩu'}
+                            </Button>
+                        </Form.Item>
+
+                        <div style={{
+                            marginTop: '20px',
+                            padding: '16px',
+                            backgroundColor: '#fffbf0',
+                            borderRadius: '8px',
+                            border: '1px solid #ffd591'
+                        }}>
+                            <Text style={{ fontSize: '13px', color: '#d68910' }}>
+                                <SafetyOutlined style={{ marginRight: '6px' }} />
+                                <strong>Lưu ý bảo mật:</strong> Sử dụng mật khẩu mạnh với ít nhất 8 ký tự,
+                                bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.
+                            </Text>
+                        </div>
+                    </Form>
+                </div>
+            </Card>
+        </div>
     );
 };
 
@@ -1024,8 +1069,6 @@ const ManageAccount = (props: IProps) => {
         }
         `}
             </style>
-
-
 
             <Modal
                 title={

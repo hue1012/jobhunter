@@ -13,16 +13,24 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import vn.hoidanit.jobhunter.domain.CustomResponse;
+import vn.hoidanit.jobhunter.domain.response.CustomResponse;
 
 @RestControllerAdvice
 public class GlobalException {
 
-    // xu ly exception cua username login khong ton tai va nhap sai thong tin login
-    @ExceptionHandler(value = { UsernameNotFoundException.class,
-            BadCredentialsException.class })
-    public ResponseEntity<CustomResponse<Object>> handleLoginException(
-            Exception ex) {
+    // handle all exception
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<CustomResponse<Object>> handleAllException(Exception ex) {
+        CustomResponse<Object> res = new CustomResponse<Object>();
+        res.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        res.setMessage(ex.getMessage());
+        res.setError("Internal Server Error");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+    }
+
+    // Xử lý exception của username login không tồn tại và nhập sai thông tin login
+    @ExceptionHandler(value = { UsernameNotFoundException.class, BadCredentialsException.class })
+    public ResponseEntity<CustomResponse<Object>> handleLoginException(Exception ex) {
         CustomResponse<Object> res = new CustomResponse<Object>();
         res.setStatusCode(HttpStatus.BAD_REQUEST.value());
         res.setError(ex.getMessage());
@@ -30,7 +38,7 @@ public class GlobalException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
 
-    // method bắt mọi lỗi validation: với lỗi trả về MethodArgumentNotValidException
+    // Method bắt mọi lỗi validation: với lỗi trả về MethodArgumentNotValidException
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CustomResponse<Object>> validateError(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
@@ -50,9 +58,29 @@ public class GlobalException {
     public ResponseEntity<CustomResponse<Object>> handleIdException(IdValidationException ex) {
         CustomResponse<Object> cus = new CustomResponse<>();
         cus.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        cus.setError(ex.getMessage());
-        cus.setMessage("Id khong ton tai-message");
+        cus.setMessage(ex.getMessage());
+        cus.setError("Id khong ton tai-message");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(cus);
+    }
+
+    @ExceptionHandler(StorageException.class)
+    public ResponseEntity<CustomResponse<Object>> handleFileUploadException(Exception ex) {
+        CustomResponse<Object> res = new CustomResponse<Object>();
+        res.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        res.setMessage(ex.getMessage());
+        res.setError("LOI UPLOAD FILE");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+    }
+
+    @ExceptionHandler(value = {
+            PermissionException.class,
+    })
+    public ResponseEntity<CustomResponse<Object>> handlePermissionException(Exception ex) {
+        CustomResponse<Object> res = new CustomResponse<Object>();
+        res.setStatusCode(HttpStatus.FORBIDDEN.value());
+        res.setMessage("Forbidden"); // da dang nhap khong co quyen
+        res.setError(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
     }
 
 }
