@@ -1,6 +1,8 @@
 package vn.hoidanit.jobhunter.repository;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -20,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     User findByRefreshTokenAndEmail(String token, String email);
 
     List<User> findByCompany(Company company);
+    
+    // Thêm methods cho reset password
+    Optional<User> findByResetPasswordTokenAndResetPasswordExpiresAfter(String token, Instant expiry);
 }

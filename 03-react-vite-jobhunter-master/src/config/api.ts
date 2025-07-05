@@ -25,6 +25,22 @@ export const callLogout = () => {
     return axios.post<IBackendRes<string>>('/api/v1/auth/logout')
 }
 
+// API calls cho quên mật khẩu
+export const callForgotPassword = (email: string) => {
+    return axios.post<IBackendRes<any>>('/api/v1/auth/forgot-password', { email });
+}
+
+export const callValidateResetToken = (token: string) => {
+    return axios.get<IBackendRes<{ email: string }>>(`/api/v1/auth/reset-password/${token}`);
+}
+
+export const callResetPassword = (token: string, newPassword: string) => {
+    return axios.post<IBackendRes<any>>('/api/v1/auth/reset-password', { 
+        token, 
+        newPassword 
+    });
+}
+
 /**
  * Upload single file
  */

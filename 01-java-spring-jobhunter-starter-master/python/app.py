@@ -5,7 +5,7 @@ import google.generativeai as genai
 
 app = Flask(__name__)
 # Sửa CORS - thêm port 4173 cho Vite và xử lý preflight
-CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000", 
+CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000",
                    "http://localhost:4173", "http://127.0.0.1:4173"])
 
 # Cấu hình Gemini AI - nên dùng environment variable trong production

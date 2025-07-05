@@ -3,5 +3,14 @@
     "cSpell.words": [
         "jsonify"
     ],
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./01-java-spring-jobhunter-starter-master",
+        "-p",
+        "test_*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true
 }

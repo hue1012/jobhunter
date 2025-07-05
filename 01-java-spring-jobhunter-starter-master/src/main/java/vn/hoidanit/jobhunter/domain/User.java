@@ -54,6 +54,14 @@ public class User {
 
     @Column(columnDefinition = "MEDIUMTEXT")
     private String refreshToken;
+    
+    // Thêm fields cho reset password
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
+    @Column(name = "reset_password_expires")
+    private Instant resetPasswordExpires;
+    
     private Instant createdAt;
     private Instant updatedAt;
     private String createdBy;

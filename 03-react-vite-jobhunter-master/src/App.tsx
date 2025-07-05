@@ -10,6 +10,8 @@ import NotFound from 'components/share/not.found';
 import Loading from 'components/share/loading';
 import LoginPage from 'pages/auth/login';
 import RegisterPage from 'pages/auth/register';
+import ForgotPassword from 'pages/auth/forgot-password';
+import ResetPassword from 'pages/auth/reset-password';
 import LayoutAdmin from 'components/admin/layout.admin';
 import ProtectedRoute from 'components/share/protected-route.ts';
 import Header from 'components/client/header.client';
@@ -63,6 +65,8 @@ export default function App() {
     if (
       window.location.pathname === '/login'
       || window.location.pathname === '/register'
+      || window.location.pathname === '/auth/forgot-password'
+      || window.location.pathname.startsWith('/auth/reset-password')
     )
       return;
     dispatch(fetchAccount())
@@ -155,6 +159,16 @@ export default function App() {
     {
       path: "/register",
       element: <RegisterPage />,
+    },
+
+    {
+      path: "/auth/forgot-password",
+      element: <ForgotPassword />,
+    },
+
+    {
+      path: "/auth/reset-password",
+      element: <ResetPassword />,
     },
   ]);
 
