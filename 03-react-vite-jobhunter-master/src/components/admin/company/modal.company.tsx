@@ -84,7 +84,7 @@ const ModalCompany = (props: IProps) => {
             //create
             const res = await callCreateCompany(name, address, value, dataLogo[0].name);
             if (res.data) {
-                message.success("Thêm mới company thành công");
+                message.success("Thêm mới công ty thành công");
                 handleReset();
                 reloadTable();
             } else {

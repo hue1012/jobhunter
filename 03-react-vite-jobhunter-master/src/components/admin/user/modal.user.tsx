@@ -101,7 +101,7 @@ const ModalUser = (props: IProps) => {
             }
             const res = await callCreateUser(user);
             if (res.data) {
-                message.success("Thêm mới user thành công");
+                message.success("Thêm mới người dùng thành công");
                 handleReset();
                 reloadTable();
             } else {

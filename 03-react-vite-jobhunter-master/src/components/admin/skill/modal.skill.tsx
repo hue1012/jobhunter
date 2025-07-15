@@ -38,7 +38,7 @@ const ModalSkill = (props: IProps) => {
             //create
             const res = await callCreateSkill(name);
             if (res.data) {
-                message.success("Thêm mới skill thành công");
+                message.success("Thêm mới kỹ năng thành công");
                 handleReset();
                 reloadTable();
             } else {

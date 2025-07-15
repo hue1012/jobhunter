@@ -46,9 +46,13 @@ const LayoutClient = () => {
   }, [location]);
 
   return (
-    <div className='layout-app' ref={rootRef}>
+    <div className='layout-app' ref={rootRef} style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      minHeight: '100vh' 
+    }}>
       <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <div className={styles['content-app']}>
+      <div className={styles['content-app']} style={{ flex: 1 }}>
         <Outlet context={[searchTerm, setSearchTerm]} />
       </div>
       <Footer />

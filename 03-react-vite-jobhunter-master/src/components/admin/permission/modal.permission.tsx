@@ -55,7 +55,7 @@ const ModalPermission = (props: IProps) => {
             }
             const res = await callCreatePermission(permission);
             if (res.data) {
-                message.success("Thêm mới permission thành công");
+                message.success("Thêm mới quyền hạn thành công");
                 handleReset();
                 reloadTable();
             } else {
