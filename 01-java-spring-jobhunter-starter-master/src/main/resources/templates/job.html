@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
 </head>
 
-
 <body
     style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">
     <table style="max-width: 80rem; min-height: 100vh; padding: 2rem; margin: 0 auto; background-color: #f5f5f5;">
@@ -15,10 +14,10 @@
                 <table style="background-color: white; border-radius: 5px; padding: 20px;">
                     <tr>
                         <td>
-                            <div style="text-align: left; font-size: 20px;">JOBHUNTER</div>
+                            <div style="text-align: left; font-size: 20px; font-weight: bold; color: #ea1e30;">JOBHUNTER</div>
                         </td>
                         <td>
-                            <div style="text-align: right; font-size: 20px;">Công việc phù hợp</div>
+                            <div style="text-align: right; font-size: 20px; color: #333;">Công việc phù hợp</div>
                         </td>
                     </tr>
                     <tr>
@@ -27,9 +26,8 @@
                     <tr>
                         <td colspan="2">
                             <div style="text-align: left;">
-                                <div style="font-size: 16px;">Hi <span th:text="${name}"></span>,</div>
-                                <div style="font-size: 16px;">One of these jobs may be your next one. Find out today!
-                                </div>
+                                <div style="font-size: 16px; margin-bottom: 10px;">Xin chào <span th:text="${name}" style="font-weight: bold; color: #3f77cc;"></span>,</div>
+                                <div style="font-size: 16px;">Dưới đây là những công việc phù hợp với kỹ năng của bạn. Hãy khám phá ngay hôm nay!</div>
                             </div>
                         </td>
                     </tr>
@@ -38,42 +36,65 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <table>
-                                <tr th:each="job: ${jobs} ">
-                                    <td>
-                                        <div style="font-size: 16px;">
-                                            <a href="http://localhost:4173/" target="_blank"
-                                                style="text-decoration: none;" th:text="${job.name}"></a>
+                            <table style="width: 100%;">
+                                <tr th:each="job: ${jobs}">
+                                    <td style="padding-bottom: 20px;">
+                                        <div style="border: 1px solid #e8e8e8; border-radius: 8px; padding: 15px; background-color: #fafafa;">
+                                            <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                                                <a href="http://localhost:3000/" target="_blank"
+                                                    style="text-decoration: none; color: #4556d2;" th:text="${job.name}"></a>
+                                            </div>
+                                            <div style="font-size: 14px; color: #666; margin-bottom: 5px;" th:if="${job.company != null}">
+                                                <strong>Công ty:</strong> <span th:text="${job.company.name}"></span>
+                                            </div>
+                                            <div style="font-size: 14px; color: #666; margin-bottom: 5px;" th:if="${job.salary != null}">
+                                                <strong>Mức lương:</strong> 
+                                                <span th:text="${#numbers.formatDecimal(job.salary, 0, 'COMMA', 0, 'POINT')}" style="color: #27ae60; font-weight: bold;"></span> VNĐ
+                                            </div>
+                                            <div style="font-size: 14px; color: #666; margin-bottom: 10px;" th:if="${job.location != null and job.location != ''}">
+                                                <strong>Địa điểm:</strong> <span th:text="${job.location}"></span>
+                                            </div>
+                                            <div style="margin-top: 10px;" th:if="${job.skills != null and !job.skills.isEmpty()}">
+                                                <strong style="font-size: 14px; color: #333;">Kỹ năng yêu cầu:</strong>
+                                                <div style="margin-top: 5px;">
+                                                    <span
+                                                        style="font-size: 12px; background: #3164c9; color: white; padding: 4px 8px; margin-right: 5px; margin-bottom: 5px; border-radius: 12px; display: inline-block;"
+                                                        th:each="skill:${job.skills}" th:text="${skill.name}"></span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="font-size: 14px;" th:text="${job.company.name}"></div>
-                                        <div style="font-size: 14px;">
-                                            <span
-                                                th:text="${#numbers.formatDecimal(job.salary, 0, 'COMMA', 0, 'POINT')}"></span>
-                                            Vnđ
-                                        </div>
-                                        <div style="margin-top: 5px;">
-                                            <span
-                                                style="font-size: 14px; background: #e8e8e8; padding: 3px; margin-right: 5px;  border-radius: 3px;"
-                                                th:each="skill:${job.skills}" th:text="${skill.name}"></span>
-                                        </div>
-                                        <div style="margin: 15px 0; border-top: 1px dashed rgba(5, 5, 5, 0.06);"></div>
                                     </td>
                                 </tr>
                             </table>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="text-align: center;">
-                            <a href="http://localhost:4173/" target="_blank"
-                                style="display: inline-block; width: 100%; height: 40px; line-height: 40px; cursor: pointer; border-radius: 5px; background-color: #ea1e30; color: white; border: none; outline: none; text-decoration: none; font-size: 16px;">
-                                Xem thêm job tại JOBHUNTER
+                        <td colspan="2" style="text-align: center; padding-top: 20px;">
+                            <a href="http://localhost:3000/" target="_blank"
+                                style="display: inline-block; width: 100%; height: 50px; line-height: 50px; cursor: pointer; border-radius: 8px; background-color: #4373d4; color: white; border: none; outline: none; text-decoration: none; font-size: 16px; font-weight: bold;">
+                                🔍 Khám phá thêm việc làm tại JOBHUNTER
                             </a>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <div style="padding-top: 20px; text-align: left; font-size: 16px;">Cheers,</div>
-                            <div style="text-align: left; font-size: 16px;">Eric.</div>
+                            <div style="padding-top: 20px; text-align: left; font-size: 14px; color: #666;">
+                                <p>Chúc bạn tìm được công việc ưng ý!</p>
+                                <p style="margin-bottom: 5px;">Trân trọng,</p>
+                                <p style="font-weight: bold; color: #1e76ea;">Đội ngũ JobHunter</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-top: 20px; border-top: 1px solid #e8e8e8;">
+                            <div style="text-align: center; font-size: 12px; color: #999;">
+                                <p>📧 Email này được gửi tự động từ hệ thống JobHunter</p>
+                                <p>Nếu bạn không muốn nhận email này, vui lòng cập nhật cài đặt tài khoản</p>
+                                <p style="margin-top: 10px;">
+                                    <a href="http://localhost:3000/" style="color: #4173e0; text-decoration: none;">JobHunter.vn</a> 
+                                    | Nền tảng tìm việc hàng đầu Việt Nam
+                                </p>
+                            </div>
                         </td>
                     </tr>
                 </table>

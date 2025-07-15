@@ -50,7 +50,7 @@ public class Job {
     @JoinTable(name = "job_skill", joinColumns = @JoinColumn(name = "job_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private List<Skill> skills;
 
-    @OneToMany(mappedBy = "job", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "job", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore // tranh vong lap vo han
     List<Resume> resumes;
 

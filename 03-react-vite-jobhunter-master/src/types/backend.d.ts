@@ -32,6 +32,10 @@ export interface IAccount {
                 module: string;
             }[]
         }
+        company?: {
+            id: string;
+            name: string;
+        }
     }
 }
 

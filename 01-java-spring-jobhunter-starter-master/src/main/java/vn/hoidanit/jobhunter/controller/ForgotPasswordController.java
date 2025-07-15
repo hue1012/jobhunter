@@ -27,7 +27,7 @@ public class ForgotPasswordController {
     
     @GetMapping("/reset-password/{token}")
     @ApiMessage("Kiểm tra token thành công")
-    public ResponseEntity<ValidateTokenResponse> validateToken(@PathVariable String token) {
+    public ResponseEntity<ValidateTokenResponse> validateToken(@PathVariable("token") String token) {
         String email = forgotPasswordService.validateResetToken(token);
         return ResponseEntity.ok(new ValidateTokenResponse(email));
     }

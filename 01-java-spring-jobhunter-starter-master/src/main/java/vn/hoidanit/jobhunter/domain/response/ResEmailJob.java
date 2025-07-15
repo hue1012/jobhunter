@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 public class ResEmailJob {
     private String name;
     private double salary;
+    private String location;
     private CompanyEmail company;
     private List<SkillEmail> skills;
 

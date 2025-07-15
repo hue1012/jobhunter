@@ -1,7 +1,6 @@
 package vn.hoidanit.jobhunter.service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
@@ -15,22 +14,17 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import vn.hoidanit.jobhunter.domain.Job;
-import vn.hoidanit.jobhunter.repository.JobRepository;
 
 @Service
 public class EmailService {
     private final MailSender mailSender;
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
-    private final JobRepository jobRepository;
 
-    public EmailService(MailSender mailSender, JavaMailSender javaMailSender, SpringTemplateEngine templateEngine,
-            JobRepository jobRepository) {
+    public EmailService(MailSender mailSender, JavaMailSender javaMailSender, SpringTemplateEngine templateEngine) {
         this.mailSender = mailSender;
         this.javaMailSender = javaMailSender;
         this.templateEngine = templateEngine;
-        this.jobRepository = jobRepository;
     }
 
     public void sendSimpleEmail() {
@@ -58,15 +52,21 @@ public class EmailService {
     @Async
     public void sendEmailFromTemplateSync(String to, String subject, String templateName, String userName,
             Object value) {
+        try {
+            Context context = new Context();
+            
+            // Sử dụng value parameter (chứa jobs đã được lọc theo skills từ SubscriberService)
+            // thay vì lấy tất cả jobs từ database
+            context.setVariable("name", userName);
+            context.setVariable("jobs", value); // value chứa List<ResEmailJob> đã được lọc theo skills
 
-        Context context = new Context();
-        List<Job> arrJob = this.jobRepository.findAll();
-
-        context.setVariable("name", userName);
-        context.setVariable("jobs", arrJob);
-
-        String content = this.templateEngine.process(templateName, context);
-        this.sendEmailSync(to, subject, content, false, true);
+            String content = this.templateEngine.process(templateName, context);
+            this.sendEmailSync(to, subject, content, false, true);
+            
+        } catch (Exception e) {
+            System.err.println("Error sending email: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }

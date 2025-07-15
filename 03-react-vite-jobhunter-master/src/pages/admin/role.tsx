@@ -80,7 +80,7 @@ const RolePage = () => {
             hideInSearch: true,
         },
         {
-            title: 'Name',
+            title: 'Tên vai trò',
             dataIndex: 'name',
             sorter: true,
         },
@@ -97,7 +97,7 @@ const RolePage = () => {
             hideInSearch: true,
         },
         {
-            title: 'CreatedAt',
+            title: 'Ngày tạo',
             dataIndex: 'createdAt',
             width: 200,
             sorter: true,
@@ -109,7 +109,7 @@ const RolePage = () => {
             hideInSearch: true,
         },
         {
-            title: 'UpdatedAt',
+            title: 'Ngày cập nhật',
             dataIndex: 'updatedAt',
             width: 200,
             sorter: true,
@@ -122,7 +122,7 @@ const RolePage = () => {
         },
         {
 
-            title: 'Actions',
+            title: 'Hành động',
             hideInSearch: true,
             width: 50,
             render: (_value, entity, _index, _action) => (
@@ -149,8 +149,8 @@ const RolePage = () => {
                     >
                         <Popconfirm
                             placement="leftTop"
-                            title={"Xác nhận xóa role"}
-                            description={"Bạn có chắc chắn muốn xóa role này ?"}
+                            title={"Xác nhận xóa vai trò"}
+                            description={"Bạn có chắc chắn muốn xóa vai trò này ?"}
                             onConfirm={() => handleDeleteRole(entity.id)}
                             okText="Xác nhận"
                             cancelText="Hủy"
@@ -213,7 +213,7 @@ const RolePage = () => {
             >
                 <DataTable<IRole>
                     actionRef={tableRef}
-                    headerTitle="Danh sách Roles (Vai Trò)"
+                    headerTitle="Danh sách Vai Trò"
                     rowKey="id"
                     loading={isFetching}
                     columns={columns}

@@ -98,32 +98,15 @@ const Header = (props: any) => {
                         <div style={{ display: "flex", gap: 30 }}>
                             <div className={styles['brand']} onClick={() => navigate('/')} title='JobHunter - Tìm việc làm'>
                                 <div className={styles['brand-logo']}></div>
-                                <div className={styles['brand-text']}>JobHunter</div>
                             </div>
                             <div className={styles['top-menu']}>
                                 <ConfigProvider
                                     theme={{
                                         token: {
-                                            colorPrimary: '#667eea',
-                                            colorBgContainer: 'transparent',
-                                            colorText: 'rgba(255, 255, 255, 0.9)',
-                                            colorBorder: 'transparent',
-                                            borderRadius: 8,
-                                            fontWeightStrong: 600,
+                                            colorPrimary: '#fff',
+                                            colorBgContainer: '#222831',
+                                            colorText: '#a7a7a7',
                                         },
-                                        components: {
-                                            Menu: {
-                                                itemHeight: 50,
-                                                itemPaddingInline: 16,
-                                                itemSelectedBg: 'rgba(255, 255, 255, 0.1)',
-                                                itemHoverBg: 'rgba(255, 255, 255, 0.08)',
-                                                itemSelectedColor: '#fff',
-                                                horizontalItemSelectedBg: 'rgba(255, 255, 255, 0.15)',
-                                                itemBorderRadius: 8,
-                                                itemColor: 'rgba(255, 255, 255, 0.9)',
-                                                itemHoverColor: '#fff',
-                                            }
-                                        }
                                     }}
                                 >
 
@@ -162,17 +145,6 @@ const Header = (props: any) => {
                 placement="right"
                 onClose={() => setOpenMobileMenu(false)}
                 open={openMobileMenu}
-                styles={{
-                    header: {
-                        background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
-                        color: 'white',
-                        border: 'none'
-                    },
-                    body: {
-                        padding: 0,
-                        background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)'
-                    }
-                }}
             >
                 <Menu
                     onClick={onClick}

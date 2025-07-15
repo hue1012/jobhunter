@@ -13,6 +13,7 @@ import { CheckSquareOutlined } from "@ant-design/icons";
 import enUS from 'antd/lib/locale/en_US';
 import dayjs from 'dayjs';
 import { IJob, ISkill } from "@/types/backend";
+import { useAppSelector } from "@/redux/hooks";
 
 interface ISkillSelect {
     label: string;
@@ -23,6 +24,10 @@ interface ISkillSelect {
 const ViewUpsertJob = (props: any) => {
     const [companies, setCompanies] = useState<ICompanySelect[]>([]);
     const [skills, setSkills] = useState<ISkillSelect[]>([]);
+    
+    // Lấy thông tin user hiện tại
+    const user = useAppSelector(state => state.account.user);
+    const isAdmin = user?.role?.name === 'ADMIN';
 
     const navigate = useNavigate();
     const [value, setValue] = useState<string>("");
@@ -43,13 +48,17 @@ const ViewUpsertJob = (props: any) => {
                 if (res && res.data) {
                     setDataUpdate(res.data);
                     setValue(res.data.description);
-                    setCompanies([
-                        {
-                            label: res.data.company?.name as string,
-                            value: `${res.data.company?.id}@#$${res.data.company?.logo}` as string,
-                            key: res.data.company?.id
-                        }
-                    ])
+                    
+                    // Chỉ set company nếu là admin
+                    if (isAdmin) {
+                        setCompanies([
+                            {
+                                label: res.data.company?.name as string,
+                                value: `${res.data.company?.id}@#$${res.data.company?.logo}` as string,
+                                key: res.data.company?.id
+                            }
+                        ])
+                    }
 
                     //skills
                     const temp: any = res.data?.skills?.map((item: ISkill) => {
@@ -59,21 +68,28 @@ const ViewUpsertJob = (props: any) => {
                             key: item.id
                         }
                     })
-                    form.setFieldsValue({
+                    
+                    const formData: any = {
                         ...res.data,
-                        company: {
+                        skills: temp
+                    };
+                    
+                    // Chỉ set company field nếu là admin
+                    if (isAdmin) {
+                        formData.company = {
                             label: res.data.company?.name as string,
                             value: `${res.data.company?.id}@#$${res.data.company?.logo}` as string,
                             key: res.data.company?.id
-                        },
-                        skills: temp
-                    })
+                        };
+                    }
+                    
+                    form.setFieldsValue(formData);
                 }
             }
         }
         init();
         return () => form.resetFields()
-    }, [id])
+    }, [id, isAdmin])
 
     // Usage of DebounceSelect
     async function fetchCompanyList(name: string): Promise<ICompanySelect[]> {
@@ -107,8 +123,6 @@ const ViewUpsertJob = (props: any) => {
     const onFinish = async (values: any) => {
         if (dataUpdate?.id) {
             //update
-            const cp = values?.company?.value?.split('@#$');
-
             let arrSkills = [];
             if (typeof values?.skills?.[0] === 'object') {
                 arrSkills = values?.skills?.map((item: any) => { return { id: item.value } });
@@ -116,14 +130,9 @@ const ViewUpsertJob = (props: any) => {
                 arrSkills = values?.skills?.map((item: any) => { return { id: +item } });
             }
 
-            const job = {
+            const job: any = {
                 name: values.name,
                 skills: arrSkills,
-                company: {
-                    id: cp && cp.length > 0 ? cp[0] : "",
-                    name: values.company.label,
-                    logo: cp && cp.length > 1 ? cp[1] : ""
-                },
                 location: values.location,
                 salary: values.salary,
                 quantity: values.quantity,
@@ -132,7 +141,16 @@ const ViewUpsertJob = (props: any) => {
                 startDate: /[0-9]{2}[/][0-9]{2}[/][0-9]{4}$/.test(values.startDate) ? dayjs(values.startDate, 'DD/MM/YYYY').toDate() : values.startDate,
                 endDate: /[0-9]{2}[/][0-9]{2}[/][0-9]{4}$/.test(values.endDate) ? dayjs(values.endDate, 'DD/MM/YYYY').toDate() : values.endDate,
                 active: values.active,
+            }
 
+            // Chỉ thêm company nếu là admin
+            if (isAdmin && values.company) {
+                const cp = values?.company?.value?.split('@#$');
+                job.company = {
+                    id: cp && cp.length > 0 ? cp[0] : "",
+                    name: values.company.label,
+                    logo: cp && cp.length > 1 ? cp[1] : ""
+                };
             }
 
             const res = await callUpdateJob(job, dataUpdate.id);
@@ -147,16 +165,10 @@ const ViewUpsertJob = (props: any) => {
             }
         } else {
             //create
-            const cp = values?.company?.value?.split('@#$');
             const arrSkills = values?.skills?.map((item: string) => { return { id: +item } });
-            const job = {
+            const job: any = {
                 name: values.name,
                 skills: arrSkills,
-                company: {
-                    id: cp && cp.length > 0 ? cp[0] : "",
-                    name: values.company.label,
-                    logo: cp && cp.length > 1 ? cp[1] : ""
-                },
                 location: values.location,
                 salary: values.salary,
                 quantity: values.quantity,
@@ -165,6 +177,16 @@ const ViewUpsertJob = (props: any) => {
                 startDate: dayjs(values.startDate, 'DD/MM/YYYY').toDate(),
                 endDate: dayjs(values.endDate, 'DD/MM/YYYY').toDate(),
                 active: values.active
+            }
+
+            // Chỉ thêm company nếu là admin
+            if (isAdmin && values.company) {
+                const cp = values?.company?.value?.split('@#$');
+                job.company = {
+                    id: cp && cp.length > 0 ? cp[0] : "",
+                    name: values.company.label,
+                    logo: cp && cp.length > 1 ? cp[1] : ""
+                };
             }
 
             const res = await callCreateJob(job);
@@ -289,7 +311,8 @@ const ViewUpsertJob = (props: any) => {
                                 />
                             </Col>
 
-                            {(dataUpdate?.id || !id) &&
+                            {/* Chỉ hiển thị trường company nếu là admin */}
+                            {isAdmin && (dataUpdate?.id || !id) &&
                                 <Col span={24} md={6}>
                                     <ProForm.Item
                                         name="company"
@@ -311,9 +334,20 @@ const ViewUpsertJob = (props: any) => {
                                             style={{ width: '100%' }}
                                         />
                                     </ProForm.Item>
-
                                 </Col>
                             }
+
+                            {/* Hiển thị thông tin company cho HR (read-only) */}
+                            {!isAdmin && user?.company && (
+                                <Col span={24} md={6}>
+                                    <ProFormText
+                                        label="Công ty"
+                                        name="companyDisplay"
+                                        disabled
+                                        initialValue={user.company.name}
+                                    />
+                                </Col>
+                            )}
 
                         </Row>
                         <Row gutter={[20, 20]}>

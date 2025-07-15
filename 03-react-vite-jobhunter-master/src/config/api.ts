@@ -155,6 +155,14 @@ export const callFetchJobById = (id: string) => {
     return axios.get<IBackendRes<IJob>>(`/api/v1/jobs/${id}`);
 }
 
+export const callFetchJobsByUserId = (userId: number, query: string) => {
+    return axios.get<IBackendRes<IModelPaginate<IJob>>>(`/api/v1/jobs/user/${userId}?${query}`);
+}
+
+export const callFetchAllJobsPublic = (query: string) => {
+    return axios.get<IBackendRes<IModelPaginate<IJob>>>(`/api/v1/jobs/all?${query}`);
+}
+
 /**
  * 
 Module Resume

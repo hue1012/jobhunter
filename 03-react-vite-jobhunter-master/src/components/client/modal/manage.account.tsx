@@ -747,8 +747,8 @@ const UserChangePassword = (props: any) => {
                         }}>
                             <Text style={{ fontSize: '13px', color: '#d68910' }}>
                                 <SafetyOutlined style={{ marginRight: '6px' }} />
-                                <strong>Lưu ý bảo mật:</strong> Sử dụng mật khẩu mạnh với ít nhất 8 ký tự,
-                                bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.
+                                <strong>Lưu ý bảo mật:</strong> Sử dụng mật khẩu mạnh với ít nhất 6 ký tự,
+                                nên bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.
                             </Text>
                         </div>
                     </Form>

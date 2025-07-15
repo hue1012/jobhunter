@@ -14,6 +14,11 @@ java {
 	sourceCompatibility = JavaVersion.VERSION_17
 }
 
+// Thêm cấu hình để compiler giữ lại parameter names
+tasks.withType<JavaCompile> {
+	options.compilerArgs.add("-parameters")
+}
+
 repositories {
 	mavenCentral()
 }

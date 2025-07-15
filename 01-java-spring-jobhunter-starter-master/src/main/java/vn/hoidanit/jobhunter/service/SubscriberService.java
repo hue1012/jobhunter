@@ -93,6 +93,7 @@ public class SubscriberService {
         ResEmailJob res = new ResEmailJob();
         res.setName(job.getName());
         res.setSalary(job.getSalary());
+        res.setLocation(job.getLocation());
         res.setCompany(new ResEmailJob.CompanyEmail(job.getCompany().getName()));
         List<Skill> skills = job.getSkills();
         List<ResEmailJob.SkillEmail> s = skills.stream().map(skill -> new ResEmailJob.SkillEmail(skill.getName()))

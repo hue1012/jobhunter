@@ -84,7 +84,7 @@ const JobPage = () => {
             },
         },
         {
-            title: 'Level',
+            title: 'Yêu cầu',
             dataIndex: 'level',
             renderFormItem: (item, props, form) => (
                 <ProFormSelect
@@ -116,7 +116,7 @@ const JobPage = () => {
         },
 
         {
-            title: 'CreatedAt',
+            title: 'Ngày tạo',
             dataIndex: 'createdAt',
             width: 200,
             sorter: true,
@@ -128,7 +128,7 @@ const JobPage = () => {
             hideInSearch: true,
         },
         {
-            title: 'UpdatedAt',
+            title: 'Ngày cập nhật',
             dataIndex: 'updatedAt',
             width: 200,
             sorter: true,
@@ -141,7 +141,7 @@ const JobPage = () => {
         },
         {
 
-            title: 'Actions',
+            title: 'Hành dộng',
             hideInSearch: true,
             width: 50,
             render: (_value, entity, _index, _action) => (
@@ -167,8 +167,8 @@ const JobPage = () => {
                     >
                         <Popconfirm
                             placement="leftTop"
-                            title={"Xác nhận xóa job"}
-                            description={"Bạn có chắc chắn muốn xóa job này ?"}
+                            title={"Xác nhận xóa việc làm"}
+                            description={"Bạn có chắc chắn muốn xóa việc làm này ?"}
                             onConfirm={() => handleDeleteJob(entity.id)}
                             okText="Xác nhận"
                             cancelText="Hủy"
@@ -241,7 +241,7 @@ const JobPage = () => {
             >
                 <DataTable<IJob>
                     actionRef={tableRef}
-                    headerTitle="Danh sách Jobs"
+                    headerTitle="Danh sách Việc làm"
                     rowKey="id"
                     loading={isFetching}
                     columns={columns}

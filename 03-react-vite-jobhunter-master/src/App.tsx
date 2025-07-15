@@ -5,6 +5,7 @@ import {
   RouterProvider,
   useLocation,
 } from "react-router-dom";
+import { App as AntdApp } from 'antd';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import NotFound from 'components/share/not.found';
 import Loading from 'components/share/loading';
@@ -46,13 +47,9 @@ const LayoutClient = () => {
   }, [location]);
 
   return (
-    <div className='layout-app' ref={rootRef} style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      minHeight: '100vh' 
-    }}>
+    <div className='layout-app' ref={rootRef}>
       <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <div className={styles['content-app']} style={{ flex: 1 }}>
+      <div className={styles['content-app']}>
         <Outlet context={[searchTerm, setSearchTerm]} />
       </div>
       <Footer />
@@ -177,8 +174,8 @@ export default function App() {
   ]);
 
   return (
-    <>
+    <AntdApp>
       <RouterProvider router={router} />
-    </>
+    </AntdApp>
   )
 }

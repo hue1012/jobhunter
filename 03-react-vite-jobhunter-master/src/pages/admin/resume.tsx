@@ -29,7 +29,7 @@ const ResumePage = () => {
         if (id) {
             const res = await callDeleteResume(id);
             if (res && res.data) {
-                message.success('Xóa Resume thành công');
+                message.success('Xóa hồ sơ ứng tuyển thành công');
                 reloadTable();
             } else {
                 notification.error({
@@ -71,29 +71,29 @@ const ResumePage = () => {
                     mode="multiple"
                     allowClear
                     valueEnum={{
-                        PENDING: 'PENDING',
-                        REVIEWING: 'REVIEWING',
-                        APPROVED: 'APPROVED',
-                        REJECTED: 'REJECTED',
+                        PENDING: 'Chờ xác nhận',
+                        REVIEWING: 'Đang xem xét',
+                        APPROVED: 'Chấp nhận',
+                        REJECTED: 'Không phù hợp',
                     }}
-                    placeholder="Chọn level"
+                    placeholder="Chọn trạng thái"
                 />
             ),
         },
 
         {
-            title: 'Job',
+            title: 'Công việc',
             dataIndex: ["job", "name"],
             hideInSearch: true,
         },
         {
-            title: 'Company',
+            title: 'Công ty',
             dataIndex: "companyName",
             hideInSearch: true,
         },
 
         {
-            title: 'CreatedAt',
+            title: 'Ngày tạo',
             dataIndex: 'createdAt',
             width: 200,
             sorter: true,
@@ -105,7 +105,7 @@ const ResumePage = () => {
             hideInSearch: true,
         },
         {
-            title: 'UpdatedAt',
+            title: 'Ngày cập nhật',
             dataIndex: 'updatedAt',
             width: 200,
             sorter: true,
@@ -118,7 +118,7 @@ const ResumePage = () => {
         },
         {
 
-            title: 'Actions',
+            title: 'Hành động',
             hideInSearch: true,
             width: 100,
             render: (_value, entity, _index, _action) => (
@@ -204,7 +204,7 @@ const ResumePage = () => {
             >
                 <DataTable<IResume>
                     actionRef={tableRef}
-                    headerTitle="Danh sách Resumes"
+                    headerTitle="Danh sách Hồ sơ ứng tuyển"
                     rowKey="id"
                     loading={isFetching}
                     columns={columns}

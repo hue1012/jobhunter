@@ -30,6 +30,10 @@ interface IState {
                 module: string;
             }[]
         }
+        company?: {
+            id: string;
+            name: string;
+        }
     };
     activeMenu: string;
 }
@@ -48,6 +52,10 @@ const initialState: IState = {
             name: "",
             permissions: [],
         },
+        company: {
+            id: "",
+            name: "",
+        }
     },
 
     activeMenu: 'home'

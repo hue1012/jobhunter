@@ -34,7 +34,7 @@ const UserPage = () => {
             console.log('Response:', res);
 
             if (typeof res === 'string' || res.statusCode === 200) {
-                message.success('Xóa User thành công');
+                message.success('Xóa người dùng thành công');
                 reloadTable();
             } else {
                 notification.error({
@@ -64,7 +64,7 @@ const UserPage = () => {
             hideInSearch: true,
         },
         {
-            title: 'Name',
+            title: 'Tên người dùng',
             dataIndex: 'name',
             sorter: true,
         },
@@ -75,21 +75,21 @@ const UserPage = () => {
         },
 
         {
-            title: 'Role',
+            title: 'Vai trò',
             dataIndex: ["role", "name"],
             sorter: true,
             hideInSearch: true
         },
 
         {
-            title: 'Company',
+            title: 'Công ty',
             dataIndex: ["company", "name"],
             sorter: true,
             hideInSearch: true
         },
 
         {
-            title: 'CreatedAt',
+            title: 'Ngày tạo',
             dataIndex: 'createdAt',
             width: 200,
             sorter: true,
@@ -101,7 +101,7 @@ const UserPage = () => {
             hideInSearch: true,
         },
         {
-            title: 'UpdatedAt',
+            title: 'Ngày cập nhật',
             dataIndex: 'updatedAt',
             width: 200,
             sorter: true,
@@ -114,7 +114,7 @@ const UserPage = () => {
         },
         {
 
-            title: 'Actions',
+            title: 'Hành động',
             hideInSearch: true,
             width: 50,
             render: (_value, entity, _index, _action) => (
@@ -142,8 +142,8 @@ const UserPage = () => {
                     >
                         <Popconfirm
                             placement="leftTop"
-                            title={"Xác nhận xóa user"}
-                            description={"Bạn có chắc chắn muốn xóa user này ?"}
+                            title={"Xác nhận xóa người dùng"}
+                            description={"Bạn có chắc chắn muốn xóa người dùng này ?"}
                             onConfirm={() => handleDeleteUser(entity.id)}
                             okText="Xác nhận"
                             cancelText="Hủy"
@@ -213,7 +213,7 @@ const UserPage = () => {
             >
                 <DataTable<IUser>
                     actionRef={tableRef}
-                    headerTitle="Danh sách Users"
+                    headerTitle="Danh sách Người dùng"
                     rowKey="id"
                     loading={isFetching}
                     columns={columns}

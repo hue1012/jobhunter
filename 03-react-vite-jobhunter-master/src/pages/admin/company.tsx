@@ -29,7 +29,7 @@ const CompanyPage = () => {
         if (id) {
             const res = await callDeleteCompany(id);
             if (res && +res.statusCode === 200) {
-                message.success('Xóa Company thành công');
+                message.success('Xóa Công ty thành công');
                 reloadTable();
             } else {
                 notification.error({
@@ -59,18 +59,18 @@ const CompanyPage = () => {
             hideInSearch: true,
         },
         {
-            title: 'Name',
+            title: 'Tên Công Ty',
             dataIndex: 'name',
             sorter: true,
         },
         {
-            title: 'Address',
+            title: 'Địa chỉ',
             dataIndex: 'address',
             sorter: true,
         },
 
         {
-            title: 'CreatedAt',
+            title: 'Ngày tạo',
             dataIndex: 'createdAt',
             width: 200,
             sorter: true,
@@ -82,7 +82,7 @@ const CompanyPage = () => {
             hideInSearch: true,
         },
         {
-            title: 'UpdatedAt',
+            title: 'Ngày cập nhật',
             dataIndex: 'updatedAt',
             width: 200,
             sorter: true,
@@ -95,7 +95,7 @@ const CompanyPage = () => {
         },
         {
 
-            title: 'Actions',
+            title: 'Hành động',
             hideInSearch: true,
             width: 50,
             render: (_value, entity, _index, _action) => (
@@ -122,8 +122,8 @@ const CompanyPage = () => {
                     >
                         <Popconfirm
                             placement="leftTop"
-                            title={"Xác nhận xóa company"}
-                            description={"Bạn có chắc chắn muốn xóa company này ?"}
+                            title={"Xác nhận xóa công ty"}
+                            description={"Bạn có chắc chắn muốn xóa công ty này ?"}
                             onConfirm={() => handleDeleteCompany(entity.id)}
                             okText="Xác nhận"
                             cancelText="Hủy"
