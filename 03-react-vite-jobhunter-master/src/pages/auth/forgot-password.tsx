@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, message, Card, Typography, Space } from 'antd';
-import { MailOutlined, ArrowLeftOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { Button, Form, Input, message, Divider } from 'antd';
 import { Link } from 'react-router-dom';
 import { callForgotPassword } from '@/config/api';
-
-const { Title, Text } = Typography;
+import styles from 'styles/auth.module.scss';
 
 const ForgotPassword = () => {
     const [form] = Form.useForm();
@@ -16,7 +14,7 @@ const ForgotPassword = () => {
         setLoading(true);
         try {
             const res = await callForgotPassword(values.email);
-            
+
             if (res && res.data) {
                 setEmailSent(true);
                 setSentEmail(values.email);
@@ -33,7 +31,7 @@ const ForgotPassword = () => {
 
     const handleResendEmail = async () => {
         if (!sentEmail) return;
-        
+
         setLoading(true);
         try {
             const res = await callForgotPassword(sentEmail);
@@ -50,225 +48,103 @@ const ForgotPassword = () => {
     };
 
     return (
-        <div style={{
-            minHeight: '100vh',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px'
-        }}>
-            {/* Background decorations */}
-            <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundImage: `
-                    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)
-                `,
-                animation: 'float 6s ease-in-out infinite'
-            }}></div>
+        <div className={styles["forgot-password-page"]}>
+            <main className={styles.main}>
+                <div className={styles.container}>
+                    <section className={styles.wrapper}>
+                        <div className={styles["brand-logo"]}></div>
 
-            <Card
-                style={{
-                    width: '100%',
-                    maxWidth: '450px',
-                    borderRadius: '20px',
-                    background: 'rgba(255, 255, 255, 0.95)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-                    position: 'relative',
-                    zIndex: 1
-                }}
-                bordered={false}
-            >
-                {!emailSent ? (
-                    // Form quên mật khẩu
-                    <>
-                        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                            <div style={{
-                                width: '80px',
-                                height: '80px',
-                                background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                margin: '0 auto 20px',
-                                boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
-                            }}>
-                                <MailOutlined style={{ fontSize: '36px', color: 'white' }} />
-                            </div>
-                            <Title level={2} style={{ 
-                                margin: 0, 
-                                background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                backgroundClip: 'text'
-                            }}>
-                                Quên Mật Khẩu? 🔐
-                            </Title>
-                            <Text type="secondary" style={{ fontSize: '16px', marginTop: '8px', display: 'block' }}>
-                                Nhập email của bạn để nhận liên kết khôi phục mật khẩu
-                            </Text>
-                        </div>
+                        {!emailSent ? (
+                            <>
+                                <div className={styles.heading}>
+                                    <h2 className={`${styles.text} ${styles["text-large"]}`}>Quên Mật Khẩu</h2>
+                                    <p className={`${styles.text} ${styles["text-normal"]}`}>
+                                        Nhập email của bạn để nhận liên kết khôi phục mật khẩu
+                                    </p>
+                                </div>
 
-                        <Form
-                            form={form}
-                            layout="vertical"
-                            onFinish={onFinish}
-                            size="large"
-                        >
-                            <Form.Item
-                                name="email"
-                                label={
-                                    <span style={{ fontSize: '16px', fontWeight: '600', color: '#374151' }}>
-                                        📧 Địa chỉ Email
-                                    </span>
-                                }
-                                rules={[
-                                    { required: true, message: 'Vui lòng nhập email!' },
-                                    { type: 'email', message: 'Email không hợp lệ!' }
-                                ]}
-                            >
-                                <Input
-                                    prefix={<MailOutlined style={{ color: '#667eea' }} />}
-                                    placeholder="Nhập email của bạn"
-                                    style={{
-                                        height: '50px',
-                                        borderRadius: '12px',
-                                        border: '2px solid #e5e7eb',
-                                        fontSize: '16px'
-                                    }}
-                                />
-                            </Form.Item>
+                                <Form
+                                    form={form}
+                                    layout="vertical"
+                                    onFinish={onFinish}
+                                >
+                                    <Form.Item
+                                        label="Email"
+                                        name="email"
+                                        rules={[
+                                            { required: true, message: 'Vui lòng nhập email!' },
+                                            { type: 'email', message: 'Email không hợp lệ!' }
+                                        ]}
+                                    >
+                                        <Input
+                                            placeholder="Nhập email của bạn"
+                                            size="large"
+                                        />
+                                    </Form.Item>
 
-                            <Form.Item style={{ marginBottom: '16px' }}>
-                                <Button
-                                    type="primary"
-                                    htmlType="submit"
-                                    loading={loading}
-                                    style={{
-                                        width: '100%',
-                                        height: '50px',
-                                        background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                                        borderColor: 'transparent',
-                                        borderRadius: '12px',
+                                    <Form.Item style={{ marginTop: '2rem' }}>
+                                        <Button
+                                            type="primary"
+                                            htmlType="submit"
+                                            loading={loading}
+                                            size="large"
+                                            block
+                                        >
+                                            Gửi Email Khôi Phục
+                                        </Button>
+                                    </Form.Item>
+                                </Form>
+
+                                <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+                                    <p className={`${styles.text} ${styles["text-normal"]}`}>
+                                        Nhớ lại mật khẩu?
+                                        <Link to="/login" className={styles["text-links"]}>Đăng nhập ngay</Link>
+                                    </p>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className={styles.heading}>
+                                    <h2 className={`${styles.text} ${styles["text-large"]}`}>Email Đã Được Gửi!</h2>
+                                    <p className={`${styles.text} ${styles["text-normal"]}`}>
+                                        Chúng tôi đã gửi liên kết khôi phục mật khẩu đến:
+                                    </p>
+                                    <p style={{
                                         fontSize: '16px',
-                                        fontWeight: '700',
-                                        boxShadow: '0 4px 16px rgba(102, 126, 234, 0.3)'
-                                    }}
-                                >
-                                    Gửi Email Khôi Phục
-                                </Button>
-                            </Form.Item>
-                        </Form>
-
-                        <div style={{ textAlign: 'center' }}>
-                            <Link to="/login">
-                                <Button
-                                    type="text"
-                                    icon={<ArrowLeftOutlined />}
-                                    style={{
-                                        color: '#667eea',
+                                        color: '#8b5cf6',
                                         fontWeight: '600',
-                                        fontSize: '14px'
-                                    }}
-                                >
-                                    Quay lại đăng nhập
-                                </Button>
-                            </Link>
-                        </div>
-                    </>
-                ) : (
-                    // Thông báo đã gửi email
-                    <div style={{ textAlign: 'center' }}>
-                        <div style={{
-                            width: '80px',
-                            height: '80px',
-                            background: 'linear-gradient(135deg, #10b981, #059669)',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            margin: '0 auto 20px',
-                            boxShadow: '0 10px 30px rgba(16, 185, 129, 0.3)'
-                        }}>
-                            <CheckCircleOutlined style={{ fontSize: '36px', color: 'white' }} />
-                        </div>
+                                        margin: '1rem 0'
+                                    }}>
+                                        {sentEmail}
+                                    </p>
+                                    <p className={`${styles.text} ${styles["text-normal"]}`}>
+                                        Vui lòng kiểm tra hộp thư (bao gồm thư mục spam).
+                                    </p>
+                                </div>
 
-                        <Title level={2} style={{ 
-                            margin: '0 0 16px 0', 
-                            background: 'linear-gradient(135deg, #10b981, #059669)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            backgroundClip: 'text'
-                        }}>
-                            Email Đã Được Gửi! ✅
-                        </Title>
+                                <div style={{ marginTop: '2rem' }}>
+                                    <Button
+                                        type="primary"
+                                        onClick={handleResendEmail}
+                                        loading={loading}
+                                        size="large"
+                                        block
+                                        style={{ marginBottom: '1rem' }}
+                                    >
+                                        Gửi Lại Email
+                                    </Button>
 
-                        <Text style={{ fontSize: '16px', color: '#6b7280', display: 'block', marginBottom: '8px' }}>
-                            Chúng tôi đã gửi liên kết khôi phục mật khẩu đến:
-                        </Text>
-                        <Text strong style={{ fontSize: '16px', color: '#667eea', display: 'block', marginBottom: '24px' }}>
-                            {sentEmail}
-                        </Text>
-                        <Text style={{ fontSize: '14px', color: '#6b7280', display: 'block', marginBottom: '24px' }}>
-                            Vui lòng kiểm tra hộp thư (bao gồm thư mục spam).
-                        </Text>
-
-                        <Space direction="vertical" style={{ width: '100%' }} size="middle">
-                            <Button
-                                type="primary"
-                                onClick={handleResendEmail}
-                                loading={loading}
-                                style={{
-                                    width: '100%',
-                                    height: '50px',
-                                    background: 'linear-gradient(135deg, #667eea, #764ba2)',
-                                    borderColor: 'transparent',
-                                    borderRadius: '12px',
-                                    fontSize: '16px',
-                                    fontWeight: '600'
-                                }}
-                            >
-                                Gửi Lại Email
-                            </Button>
-
-                            <Link to="/login" style={{ display: 'block' }}>
-                                <Button
-                                    type="text"
-                                    icon={<ArrowLeftOutlined />}
-                                    style={{
-                                        color: '#667eea',
-                                        fontWeight: '600',
-                                        fontSize: '14px'
-                                    }}
-                                >
-                                    Quay lại đăng nhập
-                                </Button>
-                            </Link>
-                        </Space>
-                    </div>
-                )}
-            </Card>
-
-            <style>
-                {`
-                @keyframes float {
-                    0%, 100% {
-                        transform: translateY(0px);
-                    }
-                    50% {
-                        transform: translateY(-10px);
-                    }
-                }
-                `}
-            </style>
+                                    <div style={{ textAlign: 'center' }}>
+                                        <p className={`${styles.text} ${styles["text-normal"]}`}>
+                                            <Link to="/login" className={styles["text-links"]}>Quay lại đăng nhập</Link>
+                                        </p>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </section>
+                </div>
+            </main>
         </div>
     );
 };

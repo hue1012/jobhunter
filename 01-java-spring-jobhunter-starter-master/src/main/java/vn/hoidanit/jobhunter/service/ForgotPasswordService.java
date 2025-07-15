@@ -130,7 +130,7 @@ public class ForgotPasswordService {
                                 box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
                                 transition: all 0.3s ease;
                             ">
-                                🔑 Đặt Lại Mật Khẩu
+                                 Đặt Lại Mật Khẩu
                             </a>
                         </div>
                         <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #ffc107;">

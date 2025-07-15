@@ -1,0 +1,107 @@
+// Apply Modal Custom Styles
+.upload-area {
+    transition: all 0.3s ease !important;
+
+    &:hover {
+        transform: translateY(-2px) !important;
+        border-color: #8b5cf6 !important;
+        background: linear-gradient(135deg, #f0f4ff, #faf5ff) !important;
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15) !important;
+
+        .upload-icon {
+            transform: scale(1.1);
+            color: #8b5cf6 !important;
+        }
+
+        .upload-text {
+            color: #6366f1 !important;
+        }
+    }
+}
+
+.modal-header {
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: rotate(45deg);
+        animation: shimmer 3s infinite;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+
+    50% {
+        transform: translateX(0%) translateY(0%) rotate(45deg);
+    }
+
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+.job-info-card {
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, transparent, rgba(99, 102, 241, 0.02), transparent);
+        border-radius: inherit;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+    }
+
+    &:hover::before {
+        opacity: 1;
+    }
+}
+
+.form-section {
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+    }
+}
+
+// Custom styles for Ant Design components
+:global {
+    .ant-upload-list-picture-card .ant-upload-list-item {
+        border-radius: 12px !important;
+        border: 2px solid #e0e7ff !important;
+
+        &:hover {
+            border-color: #8b5cf6 !important;
+        }
+    }
+
+    .ant-upload-list-picture-card .ant-upload-list-item-info::before {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(139, 92, 246, 0.8)) !important;
+    }
+
+    .ant-modal-body {
+        padding: 0 !important;
+    }
+
+    .ant-form-item-explain-error {
+        color: #ef4444 !important;
+        font-weight: 500 !important;
+        margin-top: 8px !important;
+    }
+}

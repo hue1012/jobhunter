@@ -4,7 +4,6 @@ import { Avatar, Drawer, Dropdown, MenuProps, Space, message } from 'antd';
 import { Menu, ConfigProvider } from 'antd';
 import styles from '@/styles/client.module.scss';
 import { isMobile } from 'react-device-detect';
-import { FaReact } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -97,8 +96,8 @@ const Header = (props: any) => {
                 <div className={styles["container"]}>
                     {!isMobile ?
                         <div style={{ display: "flex", gap: 30 }}>
-                            <div className={styles['brand']} >
-                                <FaReact onClick={() => navigate('/')} title='Hỏi Dân IT' />
+                            <div className={styles['brand']} onClick={() => navigate('/')} title='JobHunter - Tìm việc làm'>
+                                <div className={styles['brand-logo']}></div>
                             </div>
                             <div className={styles['top-menu']}>
                                 <ConfigProvider
@@ -136,7 +135,7 @@ const Header = (props: any) => {
                         </div>
                         :
                         <div className={styles['header-mobile']}>
-                            <span>Your APP</span>
+                            <span>JobHunter</span>
                             <MenuFoldOutlined onClick={() => setOpenMobileMenu(true)} />
                         </div>
                     }

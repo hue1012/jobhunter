@@ -1,3 +1,58 @@
+// Logo admin styles
+.adminLogo {
+    height: 64px;
+    margin: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+}
+
+.brandLogo {
+    width: 32px;
+    height: 32px;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 20px;
+        background: #ffffff;
+        border-radius: 4px 4px 0 0;
+        border: 2px solid #ffffff;
+        box-sizing: border-box;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 18px;
+        left: 0;
+        width: 100%;
+        height: 14px;
+        background: #ffffff;
+        border-radius: 0 0 4px 4px;
+        border: 2px solid #ffffff;
+        border-top: none;
+        box-sizing: border-box;
+    }
+}
+
+.brandText {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+// Job form styles
 .upsert-job-container {
     background-color: white;
     padding: 10px 30px;

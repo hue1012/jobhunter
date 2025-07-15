@@ -52,53 +52,62 @@ const LoginPage = () => {
             <main className={styles.main}>
                 <div className={styles.container}>
                     <section className={styles.wrapper}>
+                        <div className={styles["brand-logo"]}></div>
                         <div className={styles.heading}>
                             <h2 className={`${styles.text} ${styles["text-large"]}`}>Đăng Nhập</h2>
-                            <Divider />
-
+                            <p className={`${styles.text} ${styles["text-normal"]}`}>Chào mừng bạn trở lại! Vui lòng đăng nhập vào tài khoản của bạn</p>
                         </div>
                         <Form
-                            name="basic"
-                            // style={{ maxWidth: 600, margin: '0 auto' }}
+                            name="login"
                             onFinish={onFinish}
                             autoComplete="off"
+                            layout="vertical"
                         >
                             <Form.Item
-                                labelCol={{ span: 24 }} //whole column
                                 label="Email"
                                 name="username"
-                                rules={[{ required: true, message: 'Email không được để trống!' }]}
+                                rules={[{ required: true, message: 'Vui lòng nhập email của bạn!' }]}
                             >
-                                <Input />
+                                <Input
+                                    placeholder="Nhập email của bạn"
+                                    size="large"
+                                />
                             </Form.Item>
 
                             <Form.Item
-                                labelCol={{ span: 24 }} //whole column
                                 label="Mật khẩu"
                                 name="password"
-                                rules={[{ required: true, message: 'Mật khẩu không được để trống!' }]}
+                                rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
                             >
-                                <Input.Password />
+                                <Input.Password
+                                    placeholder="Nhập mật khẩu của bạn"
+                                    size="large"
+                                />
                             </Form.Item>
 
                             <div style={{ textAlign: 'right', marginBottom: '16px' }}>
-                                <Link to='/auth/forgot-password' style={{ color: '#1890ff' }}>
+                                <Link to='/auth/forgot-password' className={styles["text-links"]}>
                                     Quên mật khẩu?
                                 </Link>
                             </div>
 
-                            <Form.Item
-                            // wrapperCol={{ offset: 6, span: 16 }}
-                            >
-                                <Button type="primary" htmlType="submit" loading={isSubmit}>
+                            <Form.Item style={{ marginTop: '2rem' }}>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    loading={isSubmit}
+                                    size="large"
+                                    block
+                                >
                                     Đăng nhập
                                 </Button>
                             </Form.Item>
-                            <Divider>Or</Divider>
-                            <p className="text text-normal">Chưa có tài khoản ?
-                                <span>
-                                    <Link to='/register' > Đăng Ký </Link>
-                                </span>
+
+                            <Divider>Hoặc</Divider>
+
+                            <p className={`${styles.text} ${styles["text-normal"]}`}>
+                                Chưa có tài khoản?
+                                <Link to='/register' className={styles["text-links"]}>Đăng ký ngay</Link>
                             </p>
                         </Form>
                     </section>

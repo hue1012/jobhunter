@@ -7,6 +7,21 @@ import CompanyCard from '@/components/client/card/company.card';
 
 const { Title } = Typography;
 
+// CSS styles cho chat formatting
+const chatStyles = `
+    .chat-message strong {
+        font-weight: bold;
+        color: inherit;
+    }
+    .chat-message em {
+        font-style: italic;
+        color: inherit;
+    }
+    .chat-message br {
+        margin: 2px 0;
+    }
+`;
+
 interface Message {
     id: number;
     text: string;
@@ -25,15 +40,31 @@ const HomePage = () => {
 
     // Function để format message với HTML
     const formatMessage = (text: string): string => {
-        return text
-            // Chuyển **text** thành <strong>text</strong>
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            // Chuyển *text* thành <em>text</em>
-            .replace(/\*(.*?)\*/g, '<em>$1</em>')
-            // Chuyển xuống dòng \n thành <br>
-            .replace(/\n/g, '<br>')
-            // Chuyển bullet points
-            .replace(/• /g, '&bull; ');
+        let formatted = text;
+        
+        // Chuyển **text** thành <strong>text</strong> trước
+        formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        
+        // Chuyển *text* thành <em>text</em> (tránh conflict với ** đã được replace)
+        formatted = formatted.replace(/\*([^*\n<>]+?)\*/g, '<em>$1</em>');
+        
+        // Chuyển xuống dòng \n thành <br>
+        formatted = formatted.replace(/\n/g, '<br>');
+        
+        // Xử lý numbered lists (1. 2. 3.)
+        formatted = formatted.replace(/^(\d+\.\s+)/gm, '<br><strong>$1</strong>');
+        
+        // Xử lý bullet points với các ký hiệu khác nhau
+        formatted = formatted.replace(/^[\s]*[-•*]\s+/gm, '<br>&bull; ');
+        formatted = formatted.replace(/• /g, '&bull; ');
+        
+        // Xử lý emoji với space để không bị dính
+        formatted = formatted.replace(/(📋|📍|📈|💼|🎯|💰|🏢|⭐|✅|❌|😔|💡)/g, '$1 ');
+        
+        // Loại bỏ <br> đầu dòng thừa
+        formatted = formatted.replace(/^<br>/, '');
+        
+        return formatted;
     };
 
     // Scroll to bottom khi có tin nhắn mới
@@ -116,6 +147,9 @@ const HomePage = () => {
 
     return (
         <>
+            {/* CSS styles cho chat formatting */}
+            <style>{chatStyles}</style>
+            
             {/* Hero Section với Carousel */}
             <div style={{
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -440,11 +474,17 @@ const HomePage = () => {
                                         color: message.isBot ? '#374151' : 'white',
                                         boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
                                         fontSize: '14px',
-                                        lineHeight: '1.4'
+                                        lineHeight: '1.5',
+                                        wordBreak: 'break-word'
                                     }}>
                                         {message.isBot ? (
                                             // Render HTML cho bot message với formatting
                                             <div
+                                                className="chat-message"
+                                                style={{
+                                                    fontFamily: 'inherit',
+                                                    lineHeight: '1.5'
+                                                }}
                                                 dangerouslySetInnerHTML={{
                                                     __html: formatMessage(message.text)
                                                 }}
