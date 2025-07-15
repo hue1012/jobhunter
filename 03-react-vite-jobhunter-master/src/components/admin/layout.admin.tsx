@@ -78,34 +78,34 @@ const LayoutAdmin = () => {
                     icon: <AppstoreOutlined />
                 },
                 ...(viewCompany || ACL_ENABLE === 'false' ? [{
-                    label: <Link to='/admin/company'>Công ty</Link>,
+                    label: <Link to='/admin/company'>Quản lý Công ty</Link>,
                     key: '/admin/company',
                     icon: <BankOutlined />,
                 }] : []),
 
                 ...(viewUser || ACL_ENABLE === 'false' ? [{
-                    label: <Link to='/admin/user'>Người dùng</Link>,
+                    label: <Link to='/admin/user'>Quản lý Người dùng</Link>,
                     key: '/admin/user',
                     icon: <UserOutlined />
                 }] : []),
                 ...(viewJob || ACL_ENABLE === 'false' ? [{
-                    label: <Link to='/admin/job'>Việc làm</Link>,
+                    label: <Link to='/admin/job'> Quản lý Việc làm</Link>,
                     key: '/admin/job',
                     icon: <ScheduleOutlined />
                 }] : []),
 
                 ...(viewResume || ACL_ENABLE === 'false' ? [{
-                    label: <Link to='/admin/resume'>Hồ sơ</Link>,
+                    label: <Link to='/admin/resume'>Quản lý Hồ sơ</Link>,
                     key: '/admin/resume',
                     icon: <AliwangwangOutlined />
                 }] : []),
                 ...(viewPermission || ACL_ENABLE === 'false' ? [{
-                    label: <Link to='/admin/permission'>Quyền hạn</Link>,
+                    label: <Link to='/admin/permission'>Quản lý Quyền hạn</Link>,
                     key: '/admin/permission',
                     icon: <ApiOutlined />
                 }] : []),
                 ...(viewRole || ACL_ENABLE === 'false' ? [{
-                    label: <Link to='/admin/role'>Vai trò</Link>,
+                    label: <Link to='/admin/role'>Quản lý Vai trò</Link>,
                     key: '/admin/role',
                     icon: <ExceptionOutlined />
                 }] : []),
