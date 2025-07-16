@@ -4,6 +4,7 @@ import { EnvironmentOutlined, ThunderboltOutlined } from '@ant-design/icons';
 import { Card, Col, Empty, Row, Tag } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import styles from 'styles/client.module.scss';
+import appStyles from 'styles/app.module.scss';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
@@ -29,8 +30,21 @@ const CompanyJobList = (props: IProps) => {
 
     return (
         <div className={styles["company-jobs-section"]}>
-            <h3 style={{ marginBottom: '20px', color: '#1f2937' }}>
-                Việc làm đang tuyển ({jobs.length})
+            <h3 className={`${appStyles["enhanced-title-vietnamese"]} ${appStyles["vietnamese-gradient-text"]}`} style={{ 
+                marginBottom: '20px', 
+                fontSize: '24px',
+                fontWeight: '800',
+                background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                letterSpacing: '0.5px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontFamily: '"Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif'
+            }}>
+                💼 Việc làm đang tuyển ({jobs.length})
             </h3>
             
             {jobs && jobs.length > 0 ? (

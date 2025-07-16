@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import styles from 'styles/client.module.scss';
+import appStyles from 'styles/app.module.scss';
 import { sfIn } from "spring-filter-query-builder";
 
 import dayjs from 'dayjs';
@@ -97,9 +98,23 @@ const JobCard = (props: IProps) => {
                     <Row gutter={[20, 20]}>
                         <Col span={24}>
                             <div className={isMobile ? styles["dflex-mobile"] : styles["dflex-pc"]}>
-                                <span className={styles["title"]}>Công Việc Mới Nhất</span>
+                                <span className={`${styles["title"]} ${appStyles["enhanced-title-vietnamese"]} ${appStyles["sparkle-title"]} ${appStyles["vietnamese-gradient-text"]}`} style={{
+                                    fontSize: '28px',
+                                    fontWeight: '800',
+                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    textShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                                    letterSpacing: '0.5px',
+                                    position: 'relative',
+                                    fontFamily: '"Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif'
+                                }}>
+                                    🔥 Công Việc Mới Nhất
+                                </span>
                                 {!showPagination &&
-                                    <Link to="job">Xem tất cả</Link>
+                                    <Link to="job" className={appStyles["view-all-link"]}>
+                                        Xem tất cả
+                                    </Link>
                                 }
                             </div>
                         </Col>

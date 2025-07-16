@@ -188,7 +188,7 @@ public class JobController {
             @Filter Specification<Job> spec,
             Pageable pageable) {
         
-        // Tạo specification để lọck theo company ID
+        // Tạo specification để lọc theo company ID
         Specification<Job> companySpec = (root, query, criteriaBuilder) -> {
             return criteriaBuilder.equal(root.get("company").get("id"), companyId);
         };
