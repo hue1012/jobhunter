@@ -16,6 +16,7 @@ interface IState {
     isRefreshToken: boolean;
     errorRefreshToken: string;
     user: {
+        permissions: any;
         id: string;
         email: string;
         name: string;
