@@ -6,7 +6,7 @@ import styles from 'styles/admin.module.scss';
 import { LOCATION_LIST, SKILLS_LIST } from "@/config/utils";
 import { ICompanySelect } from "../user/modal.user";
 import { useState, useEffect } from 'react';
-import { callCreateJob, callFetchAllSkill, callFetchCompany, callFetchJobById, callUpdateJob } from "@/config/api";
+import { callCreateJob, callFetchAllSkill, callFetchCompany, callFetchJobById, callUpdateJob, callFetchCompanyById } from "@/config/api";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { CheckSquareOutlined } from "@ant-design/icons";
@@ -24,6 +24,7 @@ interface ISkillSelect {
 const ViewUpsertJob = (props: any) => {
     const [companies, setCompanies] = useState<ICompanySelect[]>([]);
     const [skills, setSkills] = useState<ISkillSelect[]>([]);
+    const [companyName, setCompanyName] = useState<string>("");
     
     // Lấy thông tin user hiện tại
     const user = useAppSelector(state => state.account.user);
@@ -49,7 +50,7 @@ const ViewUpsertJob = (props: any) => {
                     setDataUpdate(res.data);
                     setValue(res.data.description);
                     
-                    // Chỉ set company nếu là admin
+                    // Set company data cho admin
                     if (isAdmin) {
                         setCompanies([
                             {
@@ -71,25 +72,100 @@ const ViewUpsertJob = (props: any) => {
                     
                     const formData: any = {
                         ...res.data,
-                        skills: temp
+                        skills: temp,
+                        // Đảm bảo set đúng format ngày tháng
+                        startDate: res.data.startDate ? dayjs(res.data.startDate) : null,
+                        endDate: res.data.endDate ? dayjs(res.data.endDate) : null
                     };
                     
-                    // Chỉ set company field nếu là admin
+                    // Set company field based on user role
                     if (isAdmin) {
                         formData.company = {
                             label: res.data.company?.name as string,
                             value: `${res.data.company?.id}@#$${res.data.company?.logo}` as string,
                             key: res.data.company?.id
                         };
+                    } else {
+                        // For non-admin users, set company name to text field
+                        // Lấy tên công ty từ job data trước
+                        if (res.data.company?.name) {
+                            console.log("Setting company name from job data:", res.data.company.name);
+                            formData.companyName = res.data.company.name;
+                            setCompanyName(res.data.company.name);
+                        } else if (user?.company?.id) {
+                            // Nếu job không có company name, mới fetch từ API user company
+                            try {
+                                const companyRes = await callFetchCompanyById(user.company.id);
+                                if (companyRes && companyRes.data && companyRes.data.name) {
+                                    console.log("Setting company name from user company API:", companyRes.data.name);
+                                    formData.companyName = companyRes.data.name;
+                                    setCompanyName(companyRes.data.name);
+                                }
+                            } catch (error) {
+                                console.error('Error fetching company data:', error);
+                                const fallbackName = user?.company?.name || "Không có công ty";
+                                formData.companyName = fallbackName;
+                                setCompanyName(fallbackName);
+                            }
+                        } else {
+                            const fallbackName = user?.company?.name || "Không có công ty";
+                            formData.companyName = fallbackName;
+                            setCompanyName(fallbackName);
+                        }
                     }
                     
                     form.setFieldsValue(formData);
+                }
+            } else {
+                // Khi tạo mới, set company cho user không phải admin
+                if (!isAdmin) {
+                    // Sử dụng setTimeout để đảm bảo form đã được render
+                    setTimeout(() => {
+                        form.setFieldsValue({
+                            companyName: user?.company?.name || "Không có công ty"
+                        });
+                    }, 100);
                 }
             }
         }
         init();
         return () => form.resetFields()
-    }, [id, isAdmin])
+    }, [id, isAdmin, user?.company])
+
+    // Riêng useEffect để set company name cho user không phải admin
+    useEffect(() => {
+        const fetchCompanyData = async () => {
+            if (!isAdmin && user?.company?.id) {
+                try {
+                    // Gọi API để lấy thông tin công ty
+                    const res = await callFetchCompanyById(user.company.id);
+                    if (res && res.data && res.data.name) {
+                        const companyName = res.data.name;
+                        setCompanyName(companyName);
+                        
+                        // Set vào form nếu đang tạo mới (không có id)
+                        if (!id) {
+                            form.setFieldsValue({
+                                companyName: companyName
+                            });
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching company data:', error);
+                    // Fallback to user company name
+                    const fallbackName = user?.company?.name || "Không có công ty";
+                    setCompanyName(fallbackName);
+                    if (!id) {
+                        form.setFieldsValue({
+                            companyName: fallbackName
+                        });
+                    }
+                }
+            }
+        };
+
+        fetchCompanyData();
+    }, [isAdmin, user?.company?.id, id, form])
 
     // Usage of DebounceSelect
     async function fetchCompanyList(name: string): Promise<ICompanySelect[]> {
@@ -121,6 +197,15 @@ const ViewUpsertJob = (props: any) => {
     }
 
     const onFinish = async (values: any) => {
+        // Validation: Non-admin users can only create jobs for their company
+        if (!isAdmin && !user?.company) {
+            notification.error({
+                message: 'Lỗi',
+                description: 'Bạn cần thuộc về một công ty để tạo việc làm.'
+            });
+            return;
+        }
+
         if (dataUpdate?.id) {
             //update
             let arrSkills = [];
@@ -143,13 +228,21 @@ const ViewUpsertJob = (props: any) => {
                 active: values.active,
             }
 
-            // Chỉ thêm company nếu là admin
+            // Set company based on user role
             if (isAdmin && values.company) {
+                // Admin có thể chọn company - values.company từ DebounceSelect
                 const cp = values?.company?.value?.split('@#$');
                 job.company = {
                     id: cp && cp.length > 0 ? cp[0] : "",
                     name: values.company.label,
                     logo: cp && cp.length > 1 ? cp[1] : ""
+                };
+            } else if (!isAdmin && user?.company) {
+                // HR/User khác thì lấy company từ user - bỏ qua values.company
+                job.company = {
+                    id: user.company.id,
+                    name: user.company.name,
+                    logo: (user.company as any).logo || ""
                 };
             }
 
@@ -179,13 +272,21 @@ const ViewUpsertJob = (props: any) => {
                 active: values.active
             }
 
-            // Chỉ thêm company nếu là admin
+            // Set company based on user role
             if (isAdmin && values.company) {
+                // Admin có thể chọn company - values.company từ DebounceSelect
                 const cp = values?.company?.value?.split('@#$');
                 job.company = {
                     id: cp && cp.length > 0 ? cp[0] : "",
                     name: values.company.label,
                     logo: cp && cp.length > 1 ? cp[1] : ""
+                };
+            } else if (!isAdmin && user?.company) {
+                // HR/User khác thì lấy company từ user - bỏ qua values.company
+                job.company = {
+                    id: user.company.id,
+                    name: user.company.name,
+                    logo: (user.company as any).logo || ""
                 };
             }
 
@@ -311,9 +412,9 @@ const ViewUpsertJob = (props: any) => {
                                 />
                             </Col>
 
-                            {/* Chỉ hiển thị trường company nếu là admin */}
-                            {isAdmin && (dataUpdate?.id || !id) &&
-                                <Col span={24} md={6}>
+                            {/* Hiển thị trường company */}
+                            <Col span={24} md={6}>
+                                {isAdmin ? (
                                     <ProForm.Item
                                         name="company"
                                         label="Thuộc Công Ty"
@@ -334,20 +435,19 @@ const ViewUpsertJob = (props: any) => {
                                             style={{ width: '100%' }}
                                         />
                                     </ProForm.Item>
-                                </Col>
-                            }
-
-                            {/* Hiển thị thông tin company cho HR (read-only) */}
-                            {!isAdmin && user?.company && (
-                                <Col span={24} md={6}>
+                                ) : (
                                     <ProFormText
-                                        label="Công ty"
-                                        name="companyDisplay"
+                                        name="companyName"
+                                        label="Thuộc Công Ty"
                                         disabled
-                                        initialValue={user.company.name}
+                                        placeholder="Không có công ty"
+                                        initialValue={companyName || "Không có công ty"}
+                                        fieldProps={{
+                                            value: companyName || "Không có công ty"
+                                        }}
                                     />
-                                </Col>
-                            )}
+                                )}
+                            </Col>
 
                         </Row>
                         <Row gutter={[20, 20]}>
