@@ -181,4 +181,22 @@ public class JobController {
         return ResponseEntity.ok(this.jobService.fetchAll(finalSpec, pageable));
     }
 
+    @GetMapping("/jobs/company/{companyId}")
+    @ApiMessage("Fetch jobs by company ID")
+    public ResponseEntity<ResultPaginationDTO> getJobsByCompanyId(
+            @PathVariable("companyId") long companyId,
+            @Filter Specification<Job> spec,
+            Pageable pageable) {
+        
+        // Tạo specification để lọck theo company ID
+        Specification<Job> companySpec = (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.equal(root.get("company").get("id"), companyId);
+        };
+        
+        // Kết hợp với spec hiện tại nếu có
+        Specification<Job> finalSpec = spec != null ? spec.and(companySpec) : companySpec;
+        
+        return ResponseEntity.ok(this.jobService.fetchAll(finalSpec, pageable));
+    }
+
 }
