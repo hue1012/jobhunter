@@ -98,19 +98,20 @@ def chat():
             
             matching_jobs = query_jobs_from_backend(search_criteria)
             print(f"Found {len(matching_jobs)} matching jobs")
-            
+            print( f"Matching jobs details: {matching_jobs}")  # Hiển thị 3 job đầu tiên
             # BƯỚC 4: Hiển thị jobs dạng card + AI tư vấn
             print("🤖 BƯỚC 4: Hiển thị jobs và AI tư vấn...")
             if matching_jobs:
                 # Hiển thị jobs dạng card đẹp
-                jobs_cards = format_jobs_as_cards(matching_jobs)
+                # jobs_cards = format_jobs_as_cards(matching_jobs)
                 
                 # Tạo AI advice ngắn gọn
                 formatted_jobs = format_jobs_for_ai(matching_jobs)
                 ai_advice = generate_job_advice_summary(user_message, criteria, formatted_jobs, missing_fields, chat_history)
                 
                 # Kết hợp cards + advice
-                final_response = f"{jobs_cards}\n\n{ai_advice}"
+                # final_response = f"{jobs_cards}\n\n{ai_advice}"
+                final_response = f"{ai_advice}"
                 
             else:
                 # Tư vấn khi không tìm thấy jobs với gợi ý thêm thông tin
@@ -357,9 +358,10 @@ def generate_job_advice_summary(user_message, criteria, formatted_jobs, missing_
 
     Yêu cầu người dùng: {user_message}
     Tiêu chí tìm kiếm: {criteria}
-    Số lượng jobs tìm thấy: {len(formatted_jobs)}
+    list công việc ( có thể thừa): {formatted_jobs}
     
     Hãy tư vấn ngắn gọn (tối đa 800 ký tự) theo format:
+    **Hiển thị** Từ các công việc hiển thị chi tiết đầy đủ thông tin các công việc thỏa mãn yêu cầu từ tìm kiếm 
     🎯 **Đánh giá:** Nhận xét về các công việc tìm thấy
     💡 **Gợi ý ứng tuyển:** 2-3 lời khuyên để ứng tuyển thành công  
     🚀 **Hành động tiếp theo:** Bước cần làm ngay
@@ -369,6 +371,7 @@ def generate_job_advice_summary(user_message, criteria, formatted_jobs, missing_
     - **Text** để in đậm phần quan trọng
     - Ngôn ngữ thân thiện, tích cực
     - Đừng nhắc lại danh sách công việc (đã hiển thị ở trên)
+    - Chỉ hiên thị các công việc phù hợp với tiêu chí tìm kiếm của người dùng 
     """
     
     try:
@@ -384,7 +387,8 @@ def generate_job_advice_summary(user_message, criteria, formatted_jobs, missing_
         main_advice = response.text
         
         # Thêm gợi ý vào cuối nếu có
-        return main_advice + suggestions
+        # return main_advice + suggestions
+        return main_advice
         
     except Exception as e:
         return f"""🎯 **Đánh giá:** Tìm thấy {len(formatted_jobs)} cơ hội việc làm phù hợp với yêu cầu của bạn!

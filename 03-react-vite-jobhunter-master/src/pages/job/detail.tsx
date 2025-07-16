@@ -19,6 +19,14 @@ const ClientJobDetailPage = (props: any) => {
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+    // Hàm kiểm tra công việc đã hết hạn
+    const isJobExpired = (endDate: string | Date) => {
+        if (!endDate) return false;
+        const now = new Date();
+        const jobEndDate = new Date(endDate);
+        return jobEndDate < now;
+    };
+
     let location = useLocation();
     let params = new URLSearchParams(location.search);
     const id = params?.get("id"); // job id
@@ -50,10 +58,24 @@ const ClientJobDetailPage = (props: any) => {
                                     {jobDetail.name}
                                 </div>
                                 <div>
-                                    <button
-                                        onClick={() => setIsModalOpen(true)}
-                                        className={styles["btn-apply"]}
-                                    >Apply Now</button>
+                                    {!isJobExpired(jobDetail.endDate) ? (
+                                        <button
+                                            onClick={() => setIsModalOpen(true)}
+                                            className={styles["btn-apply"]}
+                                        >Apply Now</button>
+                                    ) : (
+                                        <div style={{ 
+                                            color: '#ff4d4f', 
+                                            fontWeight: 'bold', 
+                                            padding: '8px 16px',
+                                            border: '1px solid #ff4d4f',
+                                            borderRadius: '4px',
+                                            textAlign: 'center',
+                                            backgroundColor: '#fff1f0'
+                                        }}>
+                                            Công việc này đã hết hạn ứng tuyển
+                                        </div>
+                                    )}
                                 </div>
                                 <Divider />
                                 <div className={styles["skills"]}>
@@ -75,6 +97,18 @@ const ClientJobDetailPage = (props: any) => {
                                 <div>
                                     <HistoryOutlined /> {jobDetail.updatedAt ? dayjs(jobDetail.updatedAt).locale("en").fromNow() : dayjs(jobDetail.createdAt).locale("en").fromNow()}
                                 </div>
+                                {jobDetail.endDate && (
+                                    <div style={{ marginTop: '8px' }}>
+                                        <HistoryOutlined style={{ color: isJobExpired(jobDetail.endDate) ? '#ff4d4f' : '#52c41a' }} />
+                                        <span style={{ 
+                                            marginLeft: '4px',
+                                            color: isJobExpired(jobDetail.endDate) ? '#ff4d4f' : '#52c41a',
+                                            fontWeight: isJobExpired(jobDetail.endDate) ? 'bold' : 'normal'
+                                        }}>
+                                            {isJobExpired(jobDetail.endDate) ? 'Đã hết hạn' : 'Hết hạn'}: {dayjs(jobDetail.endDate).format('DD/MM/YYYY')}
+                                        </span>
+                                    </div>
+                                )}
                                 <Divider />
                                 {parse(jobDetail.description)}
                             </Col>
@@ -97,11 +131,13 @@ const ClientJobDetailPage = (props: any) => {
                     }
                 </Row>
             }
-            <ApplyModal
-                isModalOpen={isModalOpen}
-                setIsModalOpen={setIsModalOpen}
-                jobDetail={jobDetail}
-            />
+            {jobDetail && !isJobExpired(jobDetail.endDate) && (
+                <ApplyModal
+                    isModalOpen={isModalOpen}
+                    setIsModalOpen={setIsModalOpen}
+                    jobDetail={jobDetail}
+                />
+            )}
         </div>
     )
 }
