@@ -1,7 +1,7 @@
 import { callFetchCompany } from '@/config/api';
 import { convertSlug } from '@/config/utils';
 import { ICompany } from '@/types/backend';
-import { Card, Col, Divider, Empty, Pagination, Row, Spin } from 'antd';
+import { Card, Col, Divider, Empty, Pagination, Row, Spin, Tooltip } from 'antd';
 import { useState, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Link, useNavigate } from 'react-router-dom';
@@ -80,23 +80,39 @@ const CompanyCard = (props: IProps) => {
 
                         {displayCompany?.map(item => {
                             return (
-                                <Col span={24} md={6} key={item.id}>
+                                <Col span={24} md={12} lg={6} key={item.id}>
                                     <Card
                                         onClick={() => handleViewDetailJob(item)}
-                                        style={{ height: 350 }}
+                                        style={{ 
+                                            height: 350,
+                                            cursor: 'pointer'
+                                        }}
                                         hoverable
                                         cover={
                                             <div className={styles["card-customize"]} >
                                                 <img
-                                                    style={{ maxWidth: "200px" }}
-                                                    alt="example"
+                                                    alt={item.name}
                                                     src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${item?.logo}`}
                                                 />
                                             </div>
                                         }
                                     >
                                         <Divider />
-                                        <h3 style={{ textAlign: "center" }}>{item.name}</h3>
+                                        <Tooltip title={item.name} placement="top">
+                                            <h3 style={{ 
+                                                textAlign: "center", 
+                                                overflow: "hidden",
+                                                textOverflow: "ellipsis",
+                                                whiteSpace: "nowrap",
+                                                margin: "0 10px",
+                                                fontSize: "16px",
+                                                fontWeight: "600",
+                                                color: "#1f2937",
+                                                lineHeight: "1.5"
+                                            }}>
+                                                {item.name}
+                                            </h3>
+                                        </Tooltip>
                                     </Card>
                                 </Col>
                             )
