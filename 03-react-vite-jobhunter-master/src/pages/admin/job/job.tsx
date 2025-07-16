@@ -42,7 +42,7 @@ const JobPage = () => {
         tableRef?.current?.reload();
     }
     const LEVEL_MAPPING = {
-        INTERN: 'Không yêu cầu kinh ',
+        INTERN: 'Không yêu cầu kinh nghiệm',
         FRESHER: 'Từ 1 - 2 năm kinh nghiệm',
         JUNIOR: 'Từ 2 - 3 năm kinh nghiệm',
         MIDDLE: 'Từ 3 - 5 năm kinh nghiệm',
@@ -86,17 +86,20 @@ const JobPage = () => {
         {
             title: 'Yêu cầu',
             dataIndex: 'level',
+            render: (text, record) => {
+                return LEVEL_MAPPING[record.level as keyof typeof LEVEL_MAPPING] || record.level;
+            },
             renderFormItem: (item, props, form) => (
                 <ProFormSelect
                     showSearch
                     mode="multiple"
                     allowClear
                     valueEnum={{
-                        INTERN: 'INTERN',
-                        FRESHER: 'FRESHER',
-                        JUNIOR: 'JUNIOR',
-                        MIDDLE: 'MIDDLE',
-                        SENIOR: 'SENIOR',
+                        INTERN: 'Không yêu cầu kinh nghiệm',
+                        FRESHER: 'Từ 1 - 2 năm kinh nghiệm',
+                        JUNIOR: 'Từ 2 - 3 năm kinh nghiệm',
+                        MIDDLE: 'Từ 3 - 5 năm kinh nghiệm',
+                        SENIOR: 'Từ 5 năm kinh nghiệm',
                     }}
                     placeholder="Chọn level"
                 />
@@ -108,7 +111,7 @@ const JobPage = () => {
             render(dom, entity, index, action, schema) {
                 return <>
                     <Tag color={entity.active ? "lime" : "red"} >
-                        {entity.active ? "ACTIVE" : "INACTIVE"}
+                        {entity.active ? "Hoạt động" : "Ngừng hoạt động"}
                     </Tag>
                 </>
             },

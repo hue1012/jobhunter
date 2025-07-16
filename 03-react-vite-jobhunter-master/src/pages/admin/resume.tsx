@@ -101,6 +101,15 @@ const ResumePage = () => {
             title: 'Trạng Thái',
             dataIndex: 'status',
             sorter: true,
+            render: (text, record) => {
+                const statusMap: { [key: string]: string } = {
+                    'PENDING': 'Chờ xác nhận',
+                    'REVIEWING': 'Đang xem xét',
+                    'APPROVED': 'Chấp nhận',
+                    'REJECTED': 'Không phù hợp',
+                };
+                return statusMap[record.status] || record.status;
+            },
             renderFormItem: (item, props, form) => (
                 <ProFormSelect
                     showSearch

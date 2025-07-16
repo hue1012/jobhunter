@@ -155,7 +155,7 @@ const ViewUpsertJob = (props: any) => {
 
             const res = await callUpdateJob(job, dataUpdate.id);
             if (res.data) {
-                message.success("Cập nhật job thành công");
+                message.success("Cập nhật việc làm thành công");
                 navigate('/admin/job')
             } else {
                 notification.error({
@@ -191,7 +191,7 @@ const ViewUpsertJob = (props: any) => {
 
             const res = await callCreateJob(job);
             if (res.data) {
-                message.success("Tạo mới job thành công");
+                message.success("Tạo mới việc làm thành công");
                 navigate('/admin/job')
             } else {
                 notification.error({
@@ -211,10 +211,10 @@ const ViewUpsertJob = (props: any) => {
                     separator=">"
                     items={[
                         {
-                            title: <Link to="/admin/job">Manage Job</Link>,
+                            title: <Link to="/admin/job">Quản lý việc làm</Link>,
                         },
                         {
-                            title: 'Upsert Job',
+                            title: dataUpdate?.id ? 'Cập nhật việc làm' : 'Tạo mới việc làm',
                         },
                     ]}
                 />
@@ -229,7 +229,7 @@ const ViewUpsertJob = (props: any) => {
                             {
                                 searchConfig: {
                                     resetText: "Hủy",
-                                    submitText: <>{dataUpdate?.id ? "Cập nhật Job" : "Tạo mới Job"}</>
+                                    submitText: <>{dataUpdate?.id ? "Cập nhật việc làm" : "Tạo mới việc làm"}</>
                                 },
                                 onReset: () => navigate('/admin/job'),
                                 render: (_: any, dom: any) => <FooterToolbar>{dom}</FooterToolbar>,
@@ -242,12 +242,12 @@ const ViewUpsertJob = (props: any) => {
                         <Row gutter={[20, 20]}>
                             <Col span={24} md={12}>
                                 <ProFormText
-                                    label="Tên Job"
+                                    label="Tên việc làm"
                                     name="name"
                                     rules={[
                                         { required: true, message: 'Vui lòng không bỏ trống' },
                                     ]}
-                                    placeholder="Nhập tên job"
+                                    placeholder="Nhập tên việc làm"
                                 />
                             </Col>
                             <Col span={24} md={6}>
@@ -255,7 +255,7 @@ const ViewUpsertJob = (props: any) => {
                                     name="skills"
                                     label="Kỹ năng yêu cầu"
                                     options={skills}
-                                    placeholder="Please select a skill"
+                                    placeholder="Vui lòng chọn kỹ năng"
                                     rules={[{ required: true, message: 'Vui lòng chọn kỹ năng!' }]}
                                     allowClear
                                     mode="multiple"
@@ -270,7 +270,7 @@ const ViewUpsertJob = (props: any) => {
                                     name="location"
                                     label="Địa điểm"
                                     options={LOCATION_LIST.filter(item => item.value !== 'ALL')}
-                                    placeholder="Please select a location"
+                                    placeholder="Vui lòng chọn địa điểm"
                                     rules={[{ required: true, message: 'Vui lòng chọn địa điểm!' }]}
                                 />
                             </Col>
@@ -300,14 +300,14 @@ const ViewUpsertJob = (props: any) => {
                                     name="level"
                                     label="Trình độ"
                                     valueEnum={{
-                                        INTERN: 'INTERN',
-                                        FRESHER: 'FRESHER',
-                                        JUNIOR: 'JUNIOR',
-                                        MIDDLE: 'MIDDLE',
-                                        SENIOR: 'SENIOR',
+                                        INTERN: 'Không yêu cầu kinh nghiệm',
+                                        FRESHER: 'Từ 1 - 2 năm kinh nghiệm',
+                                        JUNIOR: 'Từ 2 - 3 năm kinh nghiệm',
+                                        MIDDLE: 'Từ 3 - 5 năm kinh nghiệm',
+                                        SENIOR: 'Từ 5 năm kinh nghiệm',
                                     }}
-                                    placeholder="Please select a level"
-                                    rules={[{ required: true, message: 'Vui lòng chọn level!' }]}
+                                    placeholder="Vui lòng chọn trình độ"
+                                    rules={[{ required: true, message: 'Vui lòng chọn trình độ!' }]}
                                 />
                             </Col>
 
@@ -317,7 +317,7 @@ const ViewUpsertJob = (props: any) => {
                                     <ProForm.Item
                                         name="company"
                                         label="Thuộc Công Ty"
-                                        rules={[{ required: true, message: 'Vui lòng chọn company!' }]}
+                                        rules={[{ required: true, message: 'Vui lòng chọn công ty!' }]}
                                     >
                                         <DebounceSelect
                                             allowClear
@@ -360,7 +360,7 @@ const ViewUpsertJob = (props: any) => {
                                         format: 'DD/MM/YYYY',
 
                                     }}
-                                    rules={[{ required: true, message: 'Vui lòng chọn ngày cấp' }]}
+                                    rules={[{ required: true, message: 'Vui lòng chọn ngày bắt đầu' }]}
                                     placeholder="dd/mm/yyyy"
                                 />
                             </Col>
@@ -374,7 +374,7 @@ const ViewUpsertJob = (props: any) => {
 
                                     }}
                                     // width="auto"
-                                    rules={[{ required: true, message: 'Vui lòng chọn ngày cấp' }]}
+                                    rules={[{ required: true, message: 'Vui lòng chọn ngày kết thúc' }]}
                                     placeholder="dd/mm/yyyy"
                                 />
                             </Col>
@@ -382,8 +382,8 @@ const ViewUpsertJob = (props: any) => {
                                 <ProFormSwitch
                                     label="Trạng thái"
                                     name="active"
-                                    checkedChildren="ACTIVE"
-                                    unCheckedChildren="INACTIVE"
+                                    checkedChildren="Hoạt động"
+                                    unCheckedChildren="Ngừng hoạt động"
                                     initialValue={true}
                                     fieldProps={{
                                         defaultChecked: true,
@@ -393,8 +393,8 @@ const ViewUpsertJob = (props: any) => {
                             <Col span={24}>
                                 <ProForm.Item
                                     name="description"
-                                    label="Miêu tả job"
-                                    rules={[{ required: true, message: 'Vui lòng nhập miêu tả job!' }]}
+                                    label="Mô tả việc làm"
+                                    rules={[{ required: true, message: 'Vui lòng nhập mô tả việc làm!' }]}
                                 >
                                     <ReactQuill
                                         theme="snow"
