@@ -2,7 +2,7 @@ import DataTable from "@/components/client/data-table";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { IResume } from "@/types/backend";
 import { ActionType, ProColumns, ProFormSelect } from '@ant-design/pro-components';
-import { Space, message, notification } from "antd";
+import { Space, message, notification, Button } from "antd";
 import { useState, useRef } from 'react';
 import dayjs from 'dayjs';
 import { callDeleteResume } from "@/config/api";
@@ -12,7 +12,7 @@ import ViewDetailResume from "@/components/admin/resume/view.resume";
 import { ALL_PERMISSIONS } from "@/config/permissions";
 import Access from "@/components/share/access";
 import { sfIn } from "spring-filter-query-builder";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, DownloadOutlined } from "@ant-design/icons";
 
 const ResumePage = () => {
     const tableRef = useRef<ActionType>();
@@ -37,6 +37,42 @@ const ResumePage = () => {
                     description: res.message
                 });
             }
+        }
+    }
+
+    const handleDownloadCV = async (resume: IResume) => {
+        if (resume.url) {
+            try {
+                // Use the correct path based on backend configuration
+                const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/storage/resume/${resume.url}`);
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    // Get job name from jobId if it's an object
+                    const jobName = typeof resume.jobId === 'object' && resume.jobId ? resume.jobId.name : 'job';
+                    a.download = `CV_${resume.email}_${jobName}.${resume.url.split('.').pop()}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                    message.success('Tải CV thành công');
+                } else {
+                    throw new Error('Không thể tải file');
+                }
+            } catch (error) {
+                notification.error({
+                    message: 'Lỗi tải CV',
+                    description: `Không thể tải file CV: ${resume.url}. Vui lòng kiểm tra file có tồn tại không.`
+                });
+            }
+        } else {
+            notification.error({
+                message: 'Lỗi',
+                description: 'Không tìm thấy file CV'
+            });
         }
     }
 
@@ -83,13 +119,59 @@ const ResumePage = () => {
 
         {
             title: 'Công việc',
-            dataIndex: ["job", "name"],
+            dataIndex: 'jobId',
             hideInSearch: true,
+            render: (text, record) => {
+                if (typeof record.jobId === 'object' && record.jobId) {
+                    return record.jobId.name;
+                }
+                return record.jobId || 'N/A';
+            }
         },
         {
             title: 'Công ty',
-            dataIndex: "companyName",
+            dataIndex: 'companyId',
             hideInSearch: true,
+            render: (text, record) => {
+                if (typeof record.companyId === 'object' && record.companyId) {
+                    return record.companyId.name;
+                }
+                return record.companyId || 'N/A';
+            }
+        },
+        {
+            title: 'CV File',
+            dataIndex: 'url',
+            hideInSearch: true,
+            width: 150,
+            render: (text, record) => {
+                return (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <span style={{ 
+                            fontSize: '12px', 
+                            color: '#666',
+                            wordBreak: 'break-all'
+                        }}>
+                            {record.url}
+                        </span>
+                        {record.url && (
+                            <Button
+                                type="link"
+                                size="small"
+                                icon={<DownloadOutlined />}
+                                onClick={() => handleDownloadCV(record)}
+                                style={{ 
+                                    padding: 0, 
+                                    height: 'auto',
+                                    color: '#1890ff'
+                                }}
+                            >
+                                Tải CV
+                            </Button>
+                        )}
+                    </div>
+                );
+            }
         },
 
         {
@@ -120,7 +202,7 @@ const ResumePage = () => {
 
             title: 'Hành động',
             hideInSearch: true,
-            width: 100,
+            width: 120,
             render: (_value, entity, _index, _action) => (
                 <Space>
                     <EditOutlined
@@ -134,6 +216,18 @@ const ResumePage = () => {
                             setDataInit(entity);
                         }}
                     />
+                    
+                    {entity.url && (
+                        <DownloadOutlined
+                            style={{
+                                fontSize: 20,
+                                color: '#52c41a',
+                                cursor: 'pointer'
+                            }}
+                            onClick={() => handleDownloadCV(entity)}
+                            title="Tải CV"
+                        />
+                    )}
 
                     {/* <Popconfirm
                         placement="leftTop"
@@ -193,7 +287,8 @@ const ResumePage = () => {
             temp = `${temp}&${sortBy}`;
         }
 
-        // temp += "&populate=companyId,jobId&fields=companyId.id, companyId.name, companyId.logo, jobId.id, jobId.name";
+        // Populate companyId and jobId to get related data
+        temp += "&populate=companyId,jobId&fields=companyId.id,companyId.name,companyId.logo,jobId.id,jobId.name";
         return temp;
     }
 

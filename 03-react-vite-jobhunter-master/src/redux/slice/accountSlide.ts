@@ -45,6 +45,7 @@ const initialState: IState = {
     isRefreshToken: false,
     errorRefreshToken: "",
     user: {
+        permissions: [],
         id: "",
         email: "",
         name: "",
@@ -79,6 +80,7 @@ export const accountSlide = createSlice({
             state.user.email = action.payload.email;
             state.user.name = action.payload.name;
             state.user.role = action?.payload?.role;
+            state.user.permissions = action?.payload?.role?.permissions ?? [];
 
             if (!action?.payload?.user?.role) state.user.role = {};
             state.user.role.permissions = action?.payload?.role?.permissions ?? [];
@@ -87,6 +89,7 @@ export const accountSlide = createSlice({
             localStorage.removeItem('access_token');
             state.isAuthenticated = false;
             state.user = {
+                permissions: [],
                 id: "",
                 email: "",
                 name: "",
@@ -95,6 +98,10 @@ export const accountSlide = createSlice({
                     name: "",
                     permissions: [],
                 },
+                company: {
+                    id: "",
+                    name: "",
+                }
             }
         },
         setRefreshTokenAction: (state, action) => {
@@ -120,6 +127,7 @@ export const accountSlide = createSlice({
                 state.user.email = action.payload.user?.email;
                 state.user.name = action.payload.user?.name;
                 state.user.role = action?.payload?.user?.role;
+                state.user.permissions = action?.payload?.user?.role?.permissions ?? [];
                 if (!action?.payload?.user?.role) state.user.role = {};
                 state.user.role.permissions = action?.payload?.user?.role?.permissions ?? [];
             }
