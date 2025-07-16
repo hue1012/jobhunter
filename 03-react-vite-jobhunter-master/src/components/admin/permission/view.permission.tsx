@@ -14,7 +14,7 @@ const ViewDetailPermission = (props: IProps) => {
     return (
         <>
             <Drawer
-                title="Thông Tin Permission"
+                title="Thông Tin quyền hạn"
                 placement="right"
                 onClose={() => { onClose(false); setDataInit(null) }}
                 open={open}

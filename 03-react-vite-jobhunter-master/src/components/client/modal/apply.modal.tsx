@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/redux/hooks";
 import { IJob } from "@/types/backend";
-import { ProForm, ProFormText, ProFormTextArea } from "@ant-design/pro-components";
+import { ProForm, ProFormText } from "@ant-design/pro-components";
 import {
     Button,
     Col,
@@ -22,10 +22,7 @@ import {
     UserOutlined,
     MailOutlined,
     FileTextOutlined,
-    CheckCircleOutlined,
-    BookOutlined,
-    SettingOutlined,
-    PhoneOutlined
+    CheckCircleOutlined
 } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import { callCreateResume, callUploadSingleFile } from "@/config/api";
@@ -76,6 +73,7 @@ const ApplyModal = (props: IProps) => {
                         duration: 5,
                     });
                     setIsModalOpen(false);
+                    setUrlCV(""); // Reset CV after successful submission
                 } else {
                     notification.error({
                         message: '❌ Có lỗi xảy ra',
@@ -130,7 +128,6 @@ const ApplyModal = (props: IProps) => {
             }
         },
     };
-
 
     return (
         <>
@@ -224,7 +221,7 @@ const ApplyModal = (props: IProps) => {
                 maskClosable={false}
                 footer={null}
                 destroyOnClose={true}
-                width={900}
+                width={800}
                 centered
                 style={{
                     borderRadius: '16px',
@@ -309,7 +306,7 @@ const ApplyModal = (props: IProps) => {
                                             fontSize: '18px',
                                             fontWeight: '700'
                                         }}>
-                                            💼 Thông Tin Công Việc
+                                            Thông Tin Công Việc
                                         </Title>
                                     </div>
                                     <div style={{
@@ -363,7 +360,7 @@ const ApplyModal = (props: IProps) => {
                                     }}
                                 >
                                     <Row gutter={[24, 28]}>
-                                        <Col span={12}>
+                                        <Col span={24}>
                                             <div
                                                 className={styles['form-section']}
                                                 style={{
@@ -374,6 +371,7 @@ const ApplyModal = (props: IProps) => {
                                                     boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
                                                 }}
                                             >
+                                                {/* Email Section */}
                                                 <Space align="center" style={{ marginBottom: '20px' }}>
                                                     <MailOutlined style={{
                                                         fontSize: '20px',
@@ -388,7 +386,7 @@ const ApplyModal = (props: IProps) => {
                                                         fontSize: '16px',
                                                         fontWeight: '700'
                                                     }}>
-                                                        📧 Email Liên Hệ
+                                                        Email Liên Hệ
                                                     </Text>
                                                 </Space>
                                                 <ProFormText
@@ -408,70 +406,14 @@ const ApplyModal = (props: IProps) => {
                                                     initialValue={user?.email}
                                                     placeholder="Email của bạn"
                                                 />
-                                            </div>
-                                        </Col>
-                                        <Col span={24}>
-                                            <div
-                                                className={styles['form-section']}
-                                                style={{
-                                                    background: 'white',
-                                                    padding: '24px',
-                                                    borderRadius: '12px',
-                                                    border: '1px solid #e0e7ff',
-                                                    boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-                                                }}
-                                            >
-                                                <Space align="center" style={{ marginBottom: '20px' }}>
-                                                    <PhoneOutlined style={{
-                                                        fontSize: '20px',
-                                                        color: '#10b981',
-                                                        background: 'linear-gradient(135deg, #f0fdf4, #dcfce7)',
-                                                        padding: '8px',
-                                                        borderRadius: '8px',
-                                                        border: '1px solid #bbf7d0'
-                                                    }} />
-                                                    <Text strong style={{
-                                                        color: '#1f2937',
-                                                        fontSize: '16px',
-                                                        fontWeight: '700'
-                                                    }}>
-                                                        📞 Thông Tin Liên Hệ
-                                                    </Text>
-                                                </Space>
-                                                <ProFormTextArea
-                                                    fieldProps={{
-                                                        style: {
-                                                            borderRadius: '10px',
-                                                            fontSize: '15px',
-                                                            padding: '14px 16px',
-                                                            background: '#f8faff',
-                                                            border: '2px solid #e0e7ff',
-                                                            fontWeight: '500',
-                                                            minHeight: '100px',
-                                                            resize: 'vertical'
-                                                        },
-                                                        autoSize: { minRows: 4, maxRows: 8 }
-                                                    }}
-                                                    name={"contactInfo"}
-                                                    placeholder="Vui lòng nhập thông tin liên hệ của bạn (số điện thoại, địa chỉ, các kỹ năng nổi bật...)"
-                                                    rules={[
-                                                        { required: true, message: '⚠️ Vui lòng nhập thông tin liên hệ!' },
-                                                        { min: 10, message: '📝 Thông tin liên hệ quá ngắn (tối thiểu 10 ký tự)!' }
-                                                    ]}
-                                                />
-                                            </div>
-                                        </Col>
-                                        <Col span={12}>
-                                            <div
-                                                className={styles['form-section']}
-                                                style={{
-                                                    background: 'white',
-                                                    padding: '24px',
-                                                    borderRadius: '12px',
-                                                    border: '1px solid #e0e7ff',
-                                                    boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-                                                }}
-                                            >
+
+                                                {/* CV Upload Section */}
+                                                <Divider style={{ 
+                                                    margin: '24px 0', 
+                                                    borderColor: '#e0e7ff',
+                                                    borderWidth: '1px'
+                                                }} />
+                                                
                                                 <Space align="center" style={{ marginBottom: '20px' }}>
                                                     <FileTextOutlined style={{
                                                         fontSize: '20px',
@@ -486,19 +428,24 @@ const ApplyModal = (props: IProps) => {
                                                         fontSize: '16px',
                                                         fontWeight: '700'
                                                     }}>
-                                                        📄 Tài Liệu CV
+                                                         Tài Liệu CV
                                                     </Text>
                                                 </Space>
                                                 <ProForm.Item
-                                                    rules={[{ required: true, message: '⚠️ Vui lòng tải CV lên để hoàn tất ứng tuyển!' }]}
+                                                    rules={[{ required: true, message: 'Vui lòng tải CV lên để hoàn tất ứng tuyển!' }]}
+                                                    style={{ marginBottom: '16px' }}
                                                 >
                                                     <Upload
                                                         {...propsUpload}
-                                                        listType="picture-card"
+                                                        listType="text"
                                                         showUploadList={{
-                                                            showPreviewIcon: true,
+                                                            showPreviewIcon: false,
                                                             showRemoveIcon: true,
                                                             showDownloadIcon: false,
+                                                        }}
+                                                        style={{
+                                                            width: '100%',
+                                                            display: 'block'
                                                         }}
                                                     >
                                                         <div
@@ -508,15 +455,17 @@ const ApplyModal = (props: IProps) => {
                                                                 flexDirection: 'column',
                                                                 alignItems: 'center',
                                                                 justifyContent: 'center',
-                                                                padding: '24px',
-                                                                minHeight: '140px',
+                                                                padding: '32px 24px',
+                                                                minHeight: '180px',
+                                                                width: '100%',
                                                                 background: 'linear-gradient(135deg, #f8faff, #f1f5f9)',
                                                                 border: '3px dashed #c7d2fe',
                                                                 borderRadius: '16px',
                                                                 cursor: 'pointer',
                                                                 transition: 'all 0.3s ease',
                                                                 position: 'relative',
-                                                                overflow: 'hidden'
+                                                                overflow: 'hidden',
+                                                                boxSizing: 'border-box'
                                                             }}
                                                         >
                                                             {/* Background decoration */}
@@ -532,9 +481,9 @@ const ApplyModal = (props: IProps) => {
                                                             <UploadOutlined
                                                                 className={styles['upload-icon']}
                                                                 style={{
-                                                                    fontSize: '36px',
+                                                                    fontSize: '48px',
                                                                     color: '#6366f1',
-                                                                    marginBottom: '16px',
+                                                                    marginBottom: '20px',
                                                                     position: 'relative',
                                                                     zIndex: 1,
                                                                     transition: 'all 0.3s ease'
@@ -546,14 +495,14 @@ const ApplyModal = (props: IProps) => {
                                                                     className={styles['upload-text']}
                                                                     style={{
                                                                         color: '#1f2937',
-                                                                        fontSize: '16px',
+                                                                        fontSize: '18px',
                                                                         display: 'block',
-                                                                        marginBottom: '6px',
+                                                                        marginBottom: '8px',
                                                                         fontWeight: '700',
                                                                         transition: 'color 0.3s ease'
                                                                     }}
                                                                 >
-                                                                    📁 Tải CV lên tại đây
+                                                                    📁 Nhấp để tải CV lên
                                                                 </Text>
                                                                 <Text style={{
                                                                     color: '#6b7280',
@@ -567,6 +516,42 @@ const ApplyModal = (props: IProps) => {
                                                         </div>
                                                     </Upload>
                                                 </ProForm.Item>
+                                                
+                                                {/* CV Upload Tips */}
+                                                <div style={{
+                                                    marginTop: '16px',
+                                                    padding: '16px',
+                                                    background: 'linear-gradient(135deg, #f0fdf4, #dcfce7)',
+                                                    borderRadius: '10px',
+                                                    border: '1px solid #bbf7d0',
+                                                    position: 'relative',
+                                                    overflow: 'hidden'
+                                                }}>
+                                                    {/* Background decoration */}
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        top: '-8px',
+                                                        left: '-8px',
+                                                        width: '32px',
+                                                        height: '32px',
+                                                        background: 'rgba(34, 197, 94, 0.1)',
+                                                        borderRadius: '50%'
+                                                    }} />
+                                                    <div style={{
+                                                        position: 'relative',
+                                                        zIndex: 1
+                                                    }}>
+                                                        <Text style={{
+                                                            fontSize: '14px',
+                                                            color: '#166534',
+                                                            lineHeight: '1.6',
+                                                            fontWeight: '500'
+                                                        }}>
+                                                            <strong style={{ color: '#15803d' }}>💡 Lưu ý:</strong> Hãy đảm bảo CV của bạn có đầy đủ thông tin cá nhân, 
+                                                            học vấn, kinh nghiệm làm việc và các kỹ năng phù hợp với vị trí ứng tuyển để tăng cơ hội được tuyển dụng.
+                                                        </Text>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </Col>
                                     </Row>
@@ -663,7 +648,7 @@ const ApplyModal = (props: IProps) => {
                         >
                             <Space>
                                 {isAuthenticated ? <CheckCircleOutlined /> : <UserOutlined />}
-                                {isAuthenticated ? "🎯 Gửi Đơn Ứng Tuyển" : "🔐 Đăng Nhập Ngay"}
+                                {isAuthenticated ? "Gửi Đơn Ứng Tuyển" : "🔐 Đăng Nhập Ngay"}
                             </Space>
                         </Button>
                     </div>

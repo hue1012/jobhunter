@@ -14,7 +14,7 @@ const ViewDetailUser = (props: IProps) => {
     return (
         <>
             <Drawer
-                title="Thông Tin User"
+                title="Thông Tin Người dùng"
                 placement="right"
                 onClose={() => { onClose(false); setDataInit(null) }}
                 open={open}

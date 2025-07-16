@@ -104,4 +104,97 @@
         font-weight: 500 !important;
         margin-top: 8px !important;
     }
+
+    // Fix upload button width and positioning to prevent overlap
+    .ant-upload.ant-upload-select {
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        display: block !important;
+        position: relative !important;
+        z-index: 1 !important;
+    }
+
+    .ant-upload-wrapper {
+        width: 100% !important;
+        display: block !important;
+        
+        .ant-upload-select {
+            width: 100% !important;
+            display: block !important;
+        }
+    }
+
+    // Text upload list styling
+    .ant-upload-list-text {
+        width: 100% !important;
+        margin-top: 16px !important;
+        
+        .ant-upload-list-item {
+            padding: 12px 16px !important;
+            border-radius: 10px !important;
+            border: 2px solid #e0e7ff !important;
+            background: linear-gradient(135deg, #f8faff, #f1f5f9) !important;
+            margin-bottom: 8px !important;
+            
+            &:hover {
+                border-color: #8b5cf6 !important;
+            }
+            
+            .ant-upload-list-item-name {
+                color: #1f2937 !important;
+                font-weight: 600 !important;
+            }
+            
+            .ant-upload-list-item-card-actions {
+                .anticon {
+                    color: #6366f1 !important;
+                    
+                    &:hover {
+                        color: #8b5cf6 !important;
+                    }
+                }
+            }
+        }
+    }
+
+    // Ensure proper z-index and positioning
+    .ant-upload-list {
+        width: 100% !important;
+        position: relative !important;
+        z-index: 1 !important;
+    }
+
+    // Responsive design for upload area
+    @media (max-width: 768px) {
+        .upload-area {
+            padding: 24px 16px !important;
+            min-height: 160px !important;
+
+            .upload-icon {
+                font-size: 40px !important;
+            }
+
+            .upload-text {
+                font-size: 16px !important;
+            }
+        }
+    }
+
+    @media (max-width: 480px) {
+        .upload-area {
+            padding: 20px 12px !important;
+            min-height: 140px !important;
+
+            .upload-icon {
+                font-size: 36px !important;
+            }
+
+            .upload-text {
+                font-size: 15px !important;
+            }
+        }
+    }
 }
