@@ -64,7 +64,7 @@ const UserPage = () => {
             hideInSearch: true,
         },
         {
-            title: 'Tên người dùng',
+            title: 'Tên người dùng: ',
             dataIndex: 'name',
             sorter: true,
         },

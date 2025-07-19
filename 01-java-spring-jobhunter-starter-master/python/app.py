@@ -361,10 +361,10 @@ def generate_job_advice_summary(user_message, criteria, formatted_jobs, missing_
     list công việc ( có thể thừa): {formatted_jobs}
     
     Hãy tư vấn ngắn gọn (tối đa 800 ký tự) theo format:
-    **Hiển thị** Từ các công việc hiển thị chi tiết đầy đủ thông tin các công việc thỏa mãn yêu cầu từ tìm kiếm 
-    🎯 **Đánh giá:** Nhận xét về các công việc tìm thấy
-    💡 **Gợi ý ứng tuyển:** 2-3 lời khuyên để ứng tuyển thành công  
-    🚀 **Hành động tiếp theo:** Bước cần làm ngay
+    **Hiển thị** Từ các công việc hiển thị chi tiết đầy đủ thông tin các công việc thỏamãn yêu cầu từ tìm kiếm 
+    **Đánh giá:** Nhận xét về các công việc tìm thấy
+    **Gợi ý ứng tuyển:** 2-3 lời khuyên để ứng tuyển thành công  
+    **Hành động tiếp theo:** Bước cần làm ngay
     
     Sử dụng:
     - Emoji phù hợp
@@ -372,6 +372,7 @@ def generate_job_advice_summary(user_message, criteria, formatted_jobs, missing_
     - Ngôn ngữ thân thiện, tích cực
     - Đừng nhắc lại danh sách công việc (đã hiển thị ở trên)
     - Chỉ hiên thị các công việc phù hợp với tiêu chí tìm kiếm của người dùng 
+    - khi hiển thị thì đánh số thứ tự từ 1,2,3... cho từng công việc để người dùng dễ theo dõi và gạch đầu dòng các mục chi tiết để dễ nhìn
     """
     
     try:
