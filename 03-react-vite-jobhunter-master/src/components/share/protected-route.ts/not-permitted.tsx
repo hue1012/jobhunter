@@ -10,7 +10,7 @@ const NotPermitted = () => {
             subTitle="Sorry, you are not authorized to access this page."
             extra={<Button type="primary"
                 onClick={() => navigate('/')}
-            >Về trang chủ</Button>}
+            >Back Home</Button>}
         />
     )
 };

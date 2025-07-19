@@ -47,7 +47,7 @@ const ViewDetailResume = (props: IProps) => {
     return (
         <>
             <Drawer
-                title="Thông Tin Resume"
+                title="Thông Tin Hồ sơ ứng viên"
                 placement="right"
                 onClose={() => { onClose(false); setDataInit(null) }}
                 open={open}
@@ -85,7 +85,7 @@ const ViewDetailResume = (props: IProps) => {
                         </Form>
 
                     </Descriptions.Item>
-                    <Descriptions.Item label="Tên Job">
+                    <Descriptions.Item label="Tên Công việc">
                         {dataInit?.job?.name}
 
                     </Descriptions.Item>

@@ -112,12 +112,12 @@ const ModalRole = (props: IProps) => {
                 <Row gutter={16}>
                     <Col lg={12} md={12} sm={24} xs={24}>
                         <ProFormText
-                            label="Tên Role"
+                            label="Tên vai trò"
                             name="name"
                             rules={[
                                 { required: true, message: 'Vui lòng không bỏ trống' },
                             ]}
-                            placeholder="Nhập name"
+                            placeholder="Nhập tên vai trò"
                         />
                     </Col>
                     <Col lg={12} md={12} sm={24} xs={24}>
@@ -138,7 +138,7 @@ const ModalRole = (props: IProps) => {
                             label="Miêu tả"
                             name="description"
                             rules={[{ required: true, message: 'Vui lòng không bỏ trống' }]}
-                            placeholder="Nhập miêu tả role"
+                            placeholder="Nhập miêu tả vai trò"
                             fieldProps={{
                                 autoSize: { minRows: 2 }
                             }}

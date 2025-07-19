@@ -80,10 +80,10 @@ const ModalSkill = (props: IProps) => {
                 <Row gutter={16}>
                     <Col span={24}>
                         <ProFormText
-                            label="Tên skill"
+                            label="Tên kỹ năng"
                             name="name"
                             rules={[{ required: true, message: 'Vui lòng không bỏ trống' }]}
-                            placeholder="Nhập tên skill"
+                            placeholder="Nhập tên kỹ năng"
                         />
                     </Col>
                 </Row>

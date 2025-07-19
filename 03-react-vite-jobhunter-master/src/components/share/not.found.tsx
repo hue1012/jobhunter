@@ -11,7 +11,7 @@ const NotFound = () => {
                 subTitle="Sorry, the page you visited does not exist."
                 extra={<Button type="primary"
                     onClick={() => navigate('/')}
-                >Về trang chủ</Button>}
+                >Back Home</Button>}
             />
         </>
     )

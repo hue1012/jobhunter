@@ -102,7 +102,7 @@ const ModalPermission = (props: IProps) => {
                             rules={[
                                 { required: true, message: 'Vui lòng không bỏ trống' },
                             ]}
-                            placeholder="Nhập name"
+                            placeholder="Nhập tên quyền hạn"
                         />
                     </Col>
                     <Col lg={12} md={12} sm={24} xs={24}>

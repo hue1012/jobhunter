@@ -52,14 +52,11 @@ def chat():
         if not user_message:
             return jsonify({'response': 'Vui lòng nhập câu hỏi.'}), 400
         
-        # BƯỚC 1: Sử dụng AI để phân tích intent và trích xuất thông tin tìm việc
-        print("🔍 BƯỚC 1: Phân tích intent và trích xuất thông tin...")
         extraction_result = extract_job_criteria_with_ai(user_message, chat_history)
         print(f"Extraction result: {extraction_result}")
         
         # BƯỚC 2: Xử lý dựa trên intent
         if extraction_result.get('intent') == 'search_job':
-            print("🎯 BƯỚC 2: Đây là yêu cầu tìm việc!")
             
             criteria = extraction_result.get('criteria', {})
             needs_more_info = extraction_result.get('needs_more_info', False)
@@ -100,10 +97,9 @@ def chat():
             print(f"Found {len(matching_jobs)} matching jobs")
             print( f"Matching jobs details: {matching_jobs}")  # Hiển thị 3 job đầu tiên
             # BƯỚC 4: Hiển thị jobs dạng card + AI tư vấn
-            print("🤖 BƯỚC 4: Hiển thị jobs và AI tư vấn...")
+            print("BƯỚC 4: Hiển thị jobs và AI tư vấn...")
             if matching_jobs:
                 # Hiển thị jobs dạng card đẹp
-                # jobs_cards = format_jobs_as_cards(matching_jobs)
                 
                 # Tạo AI advice ngắn gọn
                 formatted_jobs = format_jobs_for_ai(matching_jobs)
@@ -115,8 +111,7 @@ def chat():
                 
             else:
                 # Tư vấn khi không tìm thấy jobs với gợi ý thêm thông tin
-                final_response = generate_no_jobs_advice_with_suggestions(criteria, missing_fields, chat_history)
-            
+                final_response = "Không thấy công việc phù hợp với tiêu chí tìm kiếm của bạn. " 
             return jsonify({'response': final_response})
         
         else:
@@ -133,7 +128,7 @@ def chat():
         print(f"Stack trace: {traceback.format_exc()}")
         return jsonify({'response': f'Xin lỗi, có lỗi xảy ra. Vui lòng thử lại: {str(e)}'}), 500
 
-# Helper functions để tương tác với backend
+
 def query_jobs_from_backend(search_criteria):
     """
     Query jobs từ Spring Boot backend dựa trên search criteria
@@ -181,9 +176,7 @@ def query_jobs_from_backend(search_criteria):
         return []
 
 def extract_job_criteria_with_ai(user_message, chat_history):
-    """
-    Sử dụng AI để trích xuất thông tin tìm kiếm việc làm từ conversation
-    """
+
     extraction_prompt = f"""
     Bạn là một AI chuyên phân tích yêu cầu tìm việc làm. Hãy phân tích cuộc hội thoại và trích xuất thông tin tìm kiếm việc làm.
 
@@ -267,68 +260,6 @@ def format_jobs_for_ai(jobs_list):
         formatted_jobs.append(job_info)
     
     return formatted_jobs
-
-def format_jobs_as_cards(jobs_list):
-    """
-    Format danh sách jobs thành các card đẹp mắt để hiển thị trực tiếp cho user
-    Chỉ hiển thị tối đa 5 jobs
-    """
-    if not jobs_list:
-        return "❌ **Không tìm thấy công việc phù hợp**"
-    
-    # Giới hạn chỉ hiển thị tối đa 5 jobs
-    display_jobs = jobs_list[:5]
-    total_jobs = len(jobs_list)
-    
-    cards = []
-    for i, job in enumerate(display_jobs, 1):
-        # Format skills
-        skills = [skill.get('name') for skill in job.get('skills', [])]
-        skills_text = ", ".join(skills[:4])  # Chỉ hiển thị tối đa 4 skills
-        if len(skills) > 4:
-            skills_text += f" (+{len(skills) - 4} khác)"
-        
-        # Format salary
-        salary = job.get('salary', 0)
-        salary_text = f"{salary:,.0f} VNĐ" if salary > 0 else "Thỏa thuận"
-        
-        # Format level với emoji
-        level = job.get('level', 'N/A')
-        level_emoji = {
-            'INTERN': '🌱',
-            'JUNIOR': '🚀', 
-            'MIDDLE': '💼',
-            'SENIOR': '👑'
-        }.get(level, '📈')
-        
-        # Tạo card cho mỗi job với design đẹp hơn
-        card = f"""
-🏢 **{job.get('name', 'N/A')}**
-🏆 {job.get('company', {}).get('name', 'N/A')}
-📍 **Địa điểm:** {job.get('location', 'N/A')}
-💰 **Lương:** {salary_text}
-{level_emoji} **Cấp độ:** {level}
-🔧 **Kỹ năng:** {skills_text if skills_text else 'Không yêu cầu cụ thể'}
-"""
-        cards.append(card)
-    
-    # Thêm header đẹp
-    if total_jobs > 5:
-        header = f"""🎉 **TÌM THẤY {total_jobs} CÔNG VIỆC - HIỂN THỊ TOP 5** 🎉"""
-    else:
-        header = f"""🎉 **TÌM THẤY {total_jobs} CÔNG VIỆC PHÙ HỢP** 🎉"""
-    
-    # Nối tất cả cards
-    result = header + "\n".join(cards)
-    
-    # Thêm footer
-    if total_jobs > 5:
-        result += f"\n\n💡 **Còn {total_jobs - 5} công việc khác.** Bạn muốn xem thêm chi tiết vị trí nào?"
-    else:
-        result += f"\n\n🚀 **Sẵn sàng ứng tuyển?** Hãy chọn vị trí yêu thích và chuẩn bị CV ngay!"
-    
-    return result
-
 def generate_job_advice_summary(user_message, criteria, formatted_jobs, missing_fields, chat_history):
     """
     Tạo lời tư vấn AI ngắn gọn để đi kèm với job cards
@@ -339,15 +270,15 @@ def generate_job_advice_summary(user_message, criteria, formatted_jobs, missing_
         suggestions_list = []
         for field in missing_fields:
             if field == 'skills':
-                suggestions_list.append("🔧 **Kỹ năng cụ thể**")
+                suggestions_list.append(" **Kỹ năng cụ thể**")
             elif field == 'location':
-                suggestions_list.append("📍 **Địa điểm mong muốn**")
+                suggestions_list.append(" **Địa điểm mong muốn**")
             elif field == 'level':
-                suggestions_list.append("📈 **Mức kinh nghiệm**")
+                suggestions_list.append(" **Mức kinh nghiệm**")
             elif field == 'job_title':
-                suggestions_list.append("💼 **Vị trí cụ thể**")
+                suggestions_list.append(" **Vị trí cụ thể**")
             elif field == 'company':
-                suggestions_list.append("🏢 **Công ty mong muốn**")
+                suggestions_list.append(" **Công ty mong muốn**")
         
         if suggestions_list:
             suggestions = f"\n\n🔍 **Để tìm kiếm chính xác hơn, hãy chia sẻ:** " + ", ".join(suggestions_list)
@@ -364,7 +295,7 @@ def generate_job_advice_summary(user_message, criteria, formatted_jobs, missing_
     **Hiển thị** Từ các công việc hiển thị chi tiết đầy đủ thông tin các công việc thỏamãn yêu cầu từ tìm kiếm 
     **Đánh giá:** Nhận xét về các công việc tìm thấy
     **Gợi ý ứng tuyển:** 2-3 lời khuyên để ứng tuyển thành công  
-    **Hành động tiếp theo:** Bước cần làm ngay
+
     
     Sử dụng:
     - Emoji phù hợp
@@ -392,100 +323,32 @@ def generate_job_advice_summary(user_message, criteria, formatted_jobs, missing_
         return main_advice
         
     except Exception as e:
-        return f"""🎯 **Đánh giá:** Tìm thấy {len(formatted_jobs)} cơ hội việc làm phù hợp với yêu cầu của bạn!
+        return f"""
+         **Đánh giá:** Tìm thấy {len(formatted_jobs)} cơ hội việc làm phù hợp với yêu cầu của bạn!
 
-💡 **Gợi ý ứng tuyển:**
+ **Gợi ý ứng tuyển:**
 • Chuẩn bị CV chuyên nghiệp phù hợp với từng vị trí
 • Nghiên cứu thông tin công ty trước khi ứng tuyển
 • Chuẩn bị câu trả lời cho các câu hỏi phỏng vấn thường gặp
 
-🚀 **Hành động tiếp theo:** Chọn 2-3 vị trí phù hợp nhất và bắt đầu ứng tuyển ngay!{suggestions}"""
+Hành động tiếp theo:** Chọn 2-3 vị trí phù hợp nhất và bắt đầu ứng tuyển ngay!{suggestions}"""
 
-def generate_no_jobs_advice_with_suggestions(criteria, missing_fields, chat_history):
-    """
-    Tạo lời tư vấn khi không tìm thấy jobs và gợi ý thêm thông tin
-    """
-    # Tạo phần gợi ý thêm thông tin (nếu có)
-    suggestions = ""
-    if missing_fields:
-        suggestions_list = []
-        for field in missing_fields:
-            if field == 'skills':
-                suggestions_list.append("🔧 **Kỹ năng cụ thể** bạn đang có hoặc muốn phát triển")
-            elif field == 'location':
-                suggestions_list.append("📍 **Địa điểm** bạn sẵn sàng làm việc")
-            elif field == 'level':
-                suggestions_list.append("📈 **Kinh nghiệm** hiện tại của bạn")
-            elif field == 'job_title':
-                suggestions_list.append("💼 **Vị trí** bạn quan tâm")
-            elif field == 'company':
-                suggestions_list.append("🏢 **Loại công ty** bạn muốn làm việc")
-        
-        if suggestions_list:
-            suggestions = f"\n\n🔍 **Để tìm kiếm hiệu quả hơn, hãy chia sẻ:**\n• " + "\n• ".join(suggestions_list)
-    
-    advice_prompt = f"""
-    Bạn là chuyên gia tư vấn nghề nghiệp. Người dùng đã tìm việc với tiêu chí nhất định nhưng không tìm thấy kết quả phù hợp.
-
-    Tiêu chí tìm kiếm hiện tại: {criteria}
-    Lịch sử hội thoại: {chat_history}
-    
-    Hãy đưa ra lời tư vấn khuyến khích và hướng dẫn cụ thể theo format:
-    1. **Thông cảm:** Thể hiện sự hiểu biết tình hình
-    2. **Phân tích:** Tại sao có thể không tìm thấy việc phù hợp
-    3. **Gợi ý cải thiện:** Các cách để mở rộng cơ hội
-    4. **Hành động cụ thể:** Bước tiếp theo nên làm
-    5. **Động viên:** Khuyến khích tích cực
-    
-    Sử dụng:
-    - Emoji phù hợp
-    - **Text** để in đậm phần quan trọng  
-    - Format đẹp với xuống dòng \\n
-    - Ngôn ngữ thân thiện, tích cực
-    - Tối đa 1000 ký tự
-    """
-    
-    try:
-        response = model.generate_content(
-            advice_prompt,
-            generation_config=genai.types.GenerationConfig(
-                temperature=0.7,
-                max_output_tokens=800,
-                top_p=0.8,
-                top_k=40
-            )
-        )
-        main_advice = response.text
-        
-        # Thêm gợi ý vào cuối nếu có
-        return main_advice + suggestions
-        
-    except Exception as e:
-        return f"""😔 **Hiện tại chưa tìm thấy công việc phù hợp với tiêu chí của bạn**
-
-🔍 **Gợi ý cải thiện:**
-• Mở rộng khu vực tìm kiếm
-• Xem xét các vị trí tương tự  
-• Nâng cấp kỹ năng hiện tại
-• Linh hoạt hơn về mức lương
-
-💪 **Đừng nản lòng!** Thị trường việc làm luôn có cơ hội mới. Hãy tiếp tục cố gắng!{suggestions}"""
 
 def generate_initial_questions():
     """
     Tạo câu hỏi ban đầu khi người dùng chưa cung cấp thông tin tìm việc
     """
-    return """🤖 **Chào bạn! Tôi sẽ giúp bạn tìm công việc phù hợp.**
+    return """ **Chào bạn! Tôi sẽ giúp bạn tìm công việc phù hợp.**
 
 Để tìm được những cơ hội tốt nhất, bạn có thể chia sẻ:
 
-🔧 **Kỹ năng:** React, Java, Python, Design, Marketing...
-📍 **Địa điểm:** Hà Nội, TP.HCM, Đà Nẵng, Remote...  
-📈 **Kinh nghiệm:** Mới ra trường, 1-3 năm, 3-5 năm, >5 năm
-💼 **Vị trí mong muốn:** Developer, Designer, Tester...
-🏢 **Loại công ty:** Startup, công ty lớn, outsourcing...
+ **Kỹ năng:** React, Java, Python, Design, Marketing...
+ **Địa điểm:** Hà Nội, TP.HCM, Đà Nẵng, Remote...  
+ **Kinh nghiệm:** Mới ra trường, 1-3 năm, 3-5 năm, >5 năm
+ **Vị trí mong muốn:** Developer, Designer, Tester...
+ **Loại công ty:** Startup, công ty lớn, outsourcing...
 
-💡 *Chỉ cần 1 thông tin, tôi cũng có thể tìm việc cho bạn rồi!*
+ *Chỉ cần 1 thông tin, tôi cũng có thể tìm việc cho bạn rồi!*
 
 Ví dụ: "Tôi biết React" hoặc "Tìm việc ở Hà Nội" """
 
@@ -550,7 +413,7 @@ def health_check():
     return jsonify({'status': 'Server đang hoạt động!', 'port': 5000})
 
 if __name__ == '__main__':
-    print("🚀 Flask server đang khởi động...")
-    print("📡 Server sẽ chạy tại: http://127.0.0.1:5000")
-    print("🔗 Test API tại: http://127.0.0.1:5000/health")
+    print(" Flask server đang khởi động...")
+    print(" Server sẽ chạy tại: http://127.0.0.1:5000")
+    print(" Test API tại: http://127.0.0.1:5000/health")
     app.run(debug=True, port=5000, host='0.0.0.0')
