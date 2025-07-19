@@ -16,6 +16,7 @@ import {
     EyeOutlined,
     CheckCircleOutlined,
     ClockCircleOutlined,
+    CloseCircleOutlined,
     LinkOutlined
 } from "@ant-design/icons";
 import { SKILLS_LIST } from "@/config/utils";
@@ -61,8 +62,18 @@ const UserResume = (props: any) => {
             case 'pending': return <ClockCircleOutlined />;
             case 'reviewing': return <EyeOutlined />;
             case 'approved': return <CheckCircleOutlined />;
-            case 'rejected': return <ClockCircleOutlined />;
+            case 'rejected': return <CloseCircleOutlined />;
             default: return <ClockCircleOutlined />;
+        }
+    };
+
+    const getStatusText = (status: string) => {
+        switch (status?.toLowerCase()) {
+            case 'pending': return 'Chờ duyệt';
+            case 'reviewing': return 'Đang xem xét';
+            case 'approved': return 'Được chấp nhận';
+            case 'rejected': return 'Bị từ chối';
+            default: return 'Không xác định';
         }
     };
 
@@ -112,7 +123,7 @@ const UserResume = (props: any) => {
                         {getStatusIcon(status)}
                     </span>
                     <Text style={{ color: getStatusColor(status), fontWeight: '500' }}>
-                        {status}
+                        {getStatusText(status)}
                     </Text>
                 </Space>
             )

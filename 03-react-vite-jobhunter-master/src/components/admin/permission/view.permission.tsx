@@ -23,9 +23,9 @@ const ViewDetailPermission = (props: IProps) => {
             >
                 <Descriptions title="" bordered column={2} layout="vertical">
                     <Descriptions.Item label="Tên Permission">{dataInit?.name}</Descriptions.Item>
-                    <Descriptions.Item label="API Path">{dataInit?.apiPath}</Descriptions.Item>
+                    <Descriptions.Item label="Đường dẫn API">{dataInit?.apiPath}</Descriptions.Item>
 
-                    <Descriptions.Item label="Method">{dataInit?.method}</Descriptions.Item>
+                    <Descriptions.Item label="Phương thức">{dataInit?.method}</Descriptions.Item>
                     <Descriptions.Item label="Thuộc Module">{dataInit?.module}</Descriptions.Item>
 
                     <Descriptions.Item label="Ngày tạo">{dataInit && dataInit.createdAt ? dayjs(dataInit.createdAt).format('DD-MM-YYYY HH:mm:ss') : ""}</Descriptions.Item>

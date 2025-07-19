@@ -69,7 +69,7 @@ const PermissionPage = () => {
             sorter: true,
         },
         {
-            title: 'API',
+            title: 'Đường dẫn API',
             dataIndex: 'apiPath',
             sorter: true,
         },

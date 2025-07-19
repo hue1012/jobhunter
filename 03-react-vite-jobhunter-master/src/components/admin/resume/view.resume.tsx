@@ -23,7 +23,7 @@ const ViewDetailResume = (props: IProps) => {
         const status = form.getFieldValue('status');
         const res = await callUpdateResumeStatus(dataInit?.id, status)
         if (res.data) {
-            message.success("Update Resume status thành công!");
+            message.success("Cập nhật trạng thái thành công!");
             setDataInit(null);
             onClose(false);
             reloadTable();
@@ -47,7 +47,7 @@ const ViewDetailResume = (props: IProps) => {
     return (
         <>
             <Drawer
-                title="Thông Tin Vai trò"
+                title="Thông Tin Resume"
                 placement="right"
                 onClose={() => { onClose(false); setDataInit(null) }}
                 open={open}
@@ -57,7 +57,7 @@ const ViewDetailResume = (props: IProps) => {
                 extra={
 
                     <Button loading={isSubmit} type="primary" onClick={handleChangeStatus}>
-                        Change Status
+                        Thay đổi trạng thái
                     </Button>
 
                 }
@@ -76,10 +76,10 @@ const ViewDetailResume = (props: IProps) => {
                                     style={{ width: "100%" }}
                                     defaultValue={dataInit?.status}
                                 >
-                                    <Option value="PENDING">PENDING</Option>
-                                    <Option value="REVIEWING">REVIEWING</Option>
-                                    <Option value="APPROVED">APPROVED</Option>
-                                    <Option value="REJECTED">REJECTED</Option>
+                                    <Option value="PENDING">Chờ duyệt</Option>
+                                    <Option value="REVIEWING">Đang xem xét</Option>
+                                    <Option value="APPROVED">Được chấp nhận</Option>
+                                    <Option value="REJECTED">Bị từ chối</Option>
                                 </Select>
                             </Form.Item>
                         </Form>

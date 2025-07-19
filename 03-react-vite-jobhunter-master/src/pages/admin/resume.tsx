@@ -103,10 +103,10 @@ const ResumePage = () => {
             sorter: true,
             render: (text, record) => {
                 const statusMap: { [key: string]: string } = {
-                    'PENDING': 'Chờ xác nhận',
+                    'PENDING': 'Chờ duyệt',
                     'REVIEWING': 'Đang xem xét',
-                    'APPROVED': 'Chấp nhận',
-                    'REJECTED': 'Không phù hợp',
+                    'APPROVED': 'Được chấp nhận',
+                    'REJECTED': 'Bị từ chối',
                 };
                 return statusMap[record.status] || record.status;
             },
@@ -116,10 +116,10 @@ const ResumePage = () => {
                     mode="multiple"
                     allowClear
                     valueEnum={{
-                        PENDING: 'Chờ xác nhận',
+                        PENDING: 'Chờ duyệt',
                         REVIEWING: 'Đang xem xét',
-                        APPROVED: 'Chấp nhận',
-                        REJECTED: 'Không phù hợp',
+                        APPROVED: 'Được chấp nhận',
+                        REJECTED: 'Bị từ chối',
                     }}
                     placeholder="Chọn trạng thái"
                 />
