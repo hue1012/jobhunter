@@ -64,7 +64,7 @@ const JobPage = () => {
             hideInSearch: true,
         },
         {
-            title: 'Tên Job',
+            title: 'Tên công việc',
             dataIndex: 'name',
             sorter: true,
         },

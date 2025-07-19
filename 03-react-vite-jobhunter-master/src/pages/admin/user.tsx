@@ -14,6 +14,7 @@ import ViewDetailUser from "@/components/admin/user/view.user";
 import Access from "@/components/share/access";
 import { ALL_PERMISSIONS } from "@/config/permissions";
 import { sfLike } from "spring-filter-query-builder";
+import "@/styles/admin.module.scss";
 
 const UserPage = () => {
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -62,16 +63,33 @@ const UserPage = () => {
                     </>)
             },
             hideInSearch: true,
+            dataIndex: 'name',
         },
         {
-            title: 'Tên người dùng: ',
+            title: 'Tên người dùng',
             dataIndex: 'name',
             sorter: true,
+            width: 200,
+            search: {
+                transform: (value) => value
+            },
+            fieldProps: {
+                placeholder: 'Nhập tên người dùng',
+                style: { width: '100%' }
+            }
         },
         {
             title: 'Email',
             dataIndex: 'email',
             sorter: true,
+            width: 250,
+            search: {
+                transform: (value) => value
+            },
+            fieldProps: {
+                placeholder: 'Nhập email',
+                style: { width: '100%' }
+            }
         },
 
         {
